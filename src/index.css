@@ -231,8 +231,8 @@ h6 {
     height: auto;
 }
 
-.card.outline {
-    background: none;
+.card.background {
+    background: var(--background-secondary);
 }
 
 .card ul {
@@ -362,6 +362,9 @@ blockquote p {
     border: 1px solid var(--foreground-primary);
 }
 
+.button:hover {
+    cursor: pointer;
+}
 
 .input,
 .button {
@@ -369,6 +372,8 @@ blockquote p {
 }
 
 .button {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
     background-color: var(--background-tertiary);
     color: var(--foreground-primary);
     box-shadow: none;
@@ -384,8 +389,8 @@ blockquote p {
 
 }
 
-.button-hover,
-.input-hover {
+.button:hover,
+.input:hover {
     filter: brightness(110%);
 }
 
@@ -430,4 +435,9 @@ blockquote p {
 .prog-content {
     background-color: var(--foreground-primary);
     height: 5px;
+}
+
+.prog-content-large {
+    background-color: var(--foreground-primary);
+    height: 15px;
 }
