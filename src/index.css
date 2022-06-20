@@ -25,7 +25,7 @@
       :root {
           --background-primary: rgb(254, 254, 254);
           --background-secondary: rgb(254, 254, 254);
-          --background-secondary: #e2e2e2; 
+          --background-secondary: #e2e2e2;
           --foreground-primary: rgb(0, 0, 0);
           --foreground-secondary: rgb(104, 104, 104);
           --foreground-border: rgb(216, 216, 216);
@@ -225,7 +225,7 @@ h6 {
 
 .card {
     border: 1px solid var(--foreground-border);
-    margin: 3px;
+    margin: 10px;
     padding: 10px;
     border-radius: 4px;
     height: auto;
@@ -426,10 +426,9 @@ blockquote p {
 }
 
 .prog-container {
-    border: 1px solid var(--foreground-border);
+    background-color: var(--background-tertiary);
     margin-top: 10px;
     margin-bottom: 10px;
-    border-radius: 3px;
 }
 
 .prog-content {
