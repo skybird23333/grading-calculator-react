@@ -9,6 +9,11 @@ import {
 
 import { Subject } from './routes/Subject';
 
+//TODO: Export to a separate util file instead of attaching onto math
+Math.roundTwoDigits = function (num) {
+    return this.round((num + Number.EPSILON) * 100) / 100
+}
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     <div className='content'>

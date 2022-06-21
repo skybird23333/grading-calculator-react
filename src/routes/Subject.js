@@ -1,41 +1,48 @@
 import React from 'react';
 import { Button } from '../components/Button';
 import { Assessment } from '../components/Assessment';
+import { Input } from '../components/Input';
 
 var subjectInformation = {
     editing: false,
     name: 'Example Subject',
-    passing: 0.5,
+    goal: 90,
     assessments: [
         {
             name: "Task 1",
-            grading: 65,
-            weighting: 10,
+            grading: 86,
+            weighting: 20,
             due: false
         },
         {
             name: "Task 2",
-            grading: 83,
-            weighting: 12,
+            grading: 88.8,
+            weighting: 15,
             due: false
         },
         {
             name: "Task 3",
-            grading: 73.3,
-            weighting: 24,
+            grading: 80,
+            weighting: 15,
             due: false
         },
         {
             name: "Task 4",
-            grading: 50,
-            weighting: 16,
+            grading: 64,
+            weighting: 15,
+            due: false
+        },
+        {
+            name: "Task 5",
+            grading: 100,
+            weighting: 5,
             due: false
         },
         {
             name: "Exam",
-            grading: 50,
+            grading: 80,
             weighting: 30,
-            due: true
+            due: false
         },
     ]
 };
@@ -48,8 +55,8 @@ export class Subject extends React.Component {
         this.currentGradeTotal = 0; //total grading of all assessments, scaled by their weighting
         this.currentWeightTotal = 0; //total weighting of all assessments completed
         this.weightTotal = 0; //total weighting of all assessments regardless of completion
-        this.completedAssessmentCount = 0;
-        this.totalAssessmentCount = 0;
+        this.completedAssessmentCount = 0; //amount of assessments completed
+        this.totalAssessmentCount = 0; //total amount of assessments
 
         this.state.assessments.forEach(a => {
             this.weightTotal += a.weighting;
@@ -61,11 +68,13 @@ export class Subject extends React.Component {
             this.completedAssessmentCount += 1;
         });
 
-        this.unallocatedMarks = Math.round(100 - this.weightTotal);
-        this.currentGrade = this.currentGradeTotal / this.currentWeightTotal * 100;
+        this.unallocatedWeight = 100 - this.weightTotal; //weighting unallocated for, if negative means overall weighting is over 100%
+        this.currentGrade = this.currentGradeTotal / this.currentWeightTotal * 100; //the current grade, considering only completed assessments.
 
-        this.minimumGrade = ((.8 * (this.weightTotal - this.unallocatedMarks) - this.currentGradeTotal) / (this.weightTotal - this.currentWeightTotal)) * 100;
-
+        this.minimumGrade = ((this.state.goal/100 * (this.weightTotal - this.unallocatedWeight) - this.currentGradeTotal) / (this.weightTotal - this.currentWeightTotal)) * 100;
+        //the minimum amount of marks required to reach the goal.
+        //a variation of the following formula: (cGT + mG(wT-cWT)/10)wT = Goal /10
+        
         this.handleEdit = this.handleEdit.bind(this);
         this.handleEditSave = this.handleEditSave.bind(this);
     }
@@ -78,24 +87,30 @@ export class Subject extends React.Component {
         this.setState({ editing: false })
     }
 
+    handleAssessmentChange(change) {
+        const newAssessmentArray = this.state.assessments
+        newAssessmentArray[change.key] = this.change
+        this.setState({assessments: newAssessmentArray})
+    }
+
     render() {
 
         const assessments = this.state.assessments.map((m, i) => {
             return (
-                <Assessment key={i} g={m} mode={this.state.editing ? 'edit' : null} />
+                <Assessment key={i} keyy={i} g={m} mode={this.state.editing ? 'edit' : null} onAssessmentChange={this.handleAssessmentChange} />
             );
         });
 
-        const allocationWarning = this.unallocatedMarks ? <div className='error'>
+        const allocationWarning = this.unallocatedWeight ? <div className='error'>
             <p>
-                There are {this.unallocatedMarks}% of the total weighting left unallocated. Check that you have filled in all assessments.
+                There are <b>{this.unallocatedWeight}%</b> of the total weighting left unallocated for. Check that you have filled in all assessments.
             </p>
         </div> : null;
 
         let minimumScore =
             <div className="info">
                 <p>
-                    Score {Math.ceil(this.minimumGrade)}% minimum in the remaining assessments to stay on the 80% line.
+                    Score a minimum of <b>{Math.ceil(this.minimumGrade)}%</b> in the remaining assessments to stay on the {this.state.goal}% line.
 
                 </p>
             </div>
@@ -103,7 +118,7 @@ export class Subject extends React.Component {
         if (this.minimumGrade >= 100) {
             minimumScore = <div className="warn">
                 <p>
-                    You won't able to reach your goal. Scoring full marks in remaining assessments will give
+                    You won't able to reach {this.state.goal}%. Scoring <b>full</b> marks in remaining assessments will give
                     you {Math.ceil((this.currentGradeTotal + (this.weightTotal - this.currentWeightTotal)) / this.weightTotal * 100)}%.
                 </p>
             </div>
@@ -111,12 +126,14 @@ export class Subject extends React.Component {
 
         if (!(this.weightTotal - this.currentWeightTotal)) minimumScore = null
 
-        const editButton = this.state.editing ?
-            <Button style={{ float: 'right' }} onClick={this.handleEditSave}>Save</Button> :
-            <Button style={{ float: 'right' }} onClick={this.handleEdit}>Edit</Button>
 
         let scoreInformation = <div className='card background'>
-            Currently {Math.round(this.currentGrade)}% ({Math.round(this.currentGradeTotal)}% out of the {Math.round(this.currentWeightTotal)}% available)
+            <h1 style={{ width: '100%' }}>
+                {this.state.name}
+                <Button style={{ float: 'right' }} onClick={this.handleEdit}>Edit</Button>
+            </h1>
+
+            Currently {Math.roundTwoDigits(this.currentGrade)}% ({Math.roundTwoDigits(this.currentGradeTotal)}% out of the {Math.roundTwoDigits(this.currentWeightTotal)}% available)
 
 
             <div className='prog-container'>
@@ -140,18 +157,35 @@ export class Subject extends React.Component {
             </h3>
         </div>
 
+        let editInformation = <div className='card'>
+            <div style={{ display: 'block' }}>
+                <Input
+                    value={this.state.name}
+                    style={{ fontSize: 'xx-large', fontWeight: 'bold' }}
+                />
+                <Button style={{ float: 'right' }} onClick={this.handleEditSave}>Save</Button>
+            </div>
+
+            <div style={{ display: 'block' }}>
+                Goal: <Input style={{ width: 30 }} /> %
+            </div>
+
+            TIP: Use tab and shift + tab to cycle through inputs!
+
+        </div>
+
         if (this.state.editing) scoreInformation = null
+        else editInformation = null
 
         return (
             <div>
-                <h1 style={{ width: '100%' }}>
-                    {this.state.name}
-                    {editButton}
-                </h1>
 
                 {scoreInformation}
 
+                {editInformation}
+
                 {assessments}
+
             </div>
         );
     }

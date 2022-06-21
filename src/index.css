@@ -21,16 +21,16 @@
     --green: green;
 }
 
-/* BETA Dark mode
-      :root {
-          --background-primary: rgb(254, 254, 254);
-          --background-secondary: rgb(254, 254, 254);
-          --background-secondary: #e2e2e2;
-          --foreground-primary: rgb(0, 0, 0);
-          --foreground-secondary: rgb(104, 104, 104);
-          --foreground-border: rgb(216, 216, 216);
-      }
-      */
+
+/* :root {
+    --background-primary: rgb(254, 254, 254);
+    --background-secondary: #e2e2e2;
+    --background-tertiary: #ffffff;
+    --foreground-primary: rgb(0, 0, 0);
+    --foreground-secondary: rgb(104, 104, 104);
+    --foreground-border: rgb(216, 216, 216);
+} */
+
 
 html {
     min-height: 100%;
@@ -347,13 +347,19 @@ blockquote p {
 }
 
 .input {
-    background-color: var(--background-secondary);
+    background-color: var(--background-tertiary);
     color: var(--foreground-primary);
     box-shadow: none;
     padding: 7px;
     border-radius: 4px;
+    margin: 5px;
     border: 1px solid var(--foreground-border);
     outline: none;
+}
+
+.input[type="checkbox"] {
+    height: 0;
+    width: 0;
 }
 
 .input:hover,
@@ -384,6 +390,11 @@ blockquote p {
     display: inline-block
 }
 
+.button.selected {
+    color: var(--background-primary);
+    background-color: var(--foreground-primary);
+}
+
 .button-primary {
     background-color: rgb(63, 136, 219);
 
@@ -392,6 +403,10 @@ blockquote p {
 .button:hover,
 .input:hover {
     filter: brightness(110%);
+}
+
+.button:hover[disabled] {
+    filter: none
 }
 
 .button-mcpedl {

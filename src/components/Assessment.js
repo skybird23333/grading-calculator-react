@@ -1,52 +1,82 @@
 import React from 'react';
 import { FaClock, FaStar, FaWeightHanging } from 'react-icons/fa';
+import { Input } from './Input';
 import { Label } from './Label';
+import { Button } from './Button';
 
 export class Assessment extends React.Component {
     constructor(props) {
         super(props);
+        this.state = this.props.g
+        this.state.key = this.props.keyy
+
         this.color = (() => {
-            if (this.props.g.due)
+            if (this.state.due)
                 return '#05b3f2';
-            if (this.props.g.grading >= 80)
+            if (this.state.grading >= 80)
                 return 'green';
-            if (this.props.g.grading === 0)
+            if (this.state.grading === 0)
                 return 'black';
-            return this.props.g.grading >= 50 ? 'orange' : 'red';
+            return this.state.grading >= 50 ? 'orange' : 'red';
         })();
 
+        this.handleNameChange = this.handleNameChange.bind(this)
+        this.handleWeightChange = this.handleWeightChange.bind(this)
+        this.handleGradingChange = this.handleGradingChange.bind(this)
 
     }
+
+    handleNameChange(e) {this.setState({name: e.target.value});this.props.onAsssessmentChange(this.state)}
+    handleWeightChange(e) {this.setState({weighting: e.target.value});this.props.onAsssessmentChange(this.state)}
+    handleGradingChange(e) {this.setState({grading: e.target.value});this.props.onAsssessmentChange(this.state)}
 
     render() {
 
         switch (this.props.mode) {
             case 'edit':
                 return (
-                    <div className='card background'>
-                        <input value={this.props.g.name}
-                            style={{ fontSize: 'large', display: 'block', fontWeight: 'bold' }}
-                            className='input' />
-                        <FaWeightHanging />
-                        <input value={this.props.g.weighting}
-                            className='input' />%
-                        <FaStar />
-                        <input value={this.props.g.grading}
-                            className='input' />%
+                    <div className='card background' style={{ borderLeft: `5px solid grey` }}>
+                        <div style={{ display: 'block' }}>
+                            <Input
+                                value={this.state.name}
+                                style={{ fontSize: 'large', fontWeight: 'bold' }}
+                                onChange={this.handleNameChange}
+                                />
+                        </div>
+                        <FaWeightHanging /> Weighting
+                        <Input
+                            value={this.state.weighting}
+                            style={{ width: 30 }}
+                            onChange={this.handleWeightChange}
+                            />%
+                        <div style={{ float: 'right' }}>
+                            <div style={{ display: 'block' }}>
+                                <Button onClick={() => {this.setState({due: true})}} selected={this.state.due}>Due</Button>
+                                <Button onClick={() => {this.setState({due: false})}} selected={!this.state.due}>Complete</Button>
+
+                            </div>
+                            Grading:
+                            <Input
+                                value={this.state.grading}
+                                style={{ width: 30 }}
+                                onChange={this.handleGradingChange}
+                                />%
+
+                        </div>
                     </div>
                 );
             default:
 
-                let actualWeighting = `${Math.round(this.props.g.grading * this.props.g.weighting) / 100}%/`;
+                let actualWeighting = `${Math.roundTwoDigits(this.state.grading * this.state.weighting) / 100}%/`;
 
-                const marks = this.props.g.due ? 'Due assessment' : `${this.props.g.grading}%`;
+                const marks = this.state.due ? 'Due assessment' : `${this.state.grading}%`;
 
-                const progressbar = this.props.g.due ? null :
+                const progressbar = this.state.due ? null :
                     <div className="prog-container">
-                        <div className="prog-content" style={{ width: this.props.g.grading + '%', background: this.color }}></div>
+                        <div className="prog-content" style={{ width: this.state.grading + '%', background: this.color }}></div>
                     </div>;
 
-                if (this.props.g.due) {
+                if (this.state.due) {
                     actualWeighting = null;
                 }
 
@@ -55,7 +85,7 @@ export class Assessment extends React.Component {
 
                         <div style={{ background: 'grey', width: '95%', height: '100%' }}></div>
 
-                        <h3>{this.props.g.name} </h3>
+                        <h3>{this.state.name} </h3>
 
 
                         {progressbar}
@@ -67,7 +97,7 @@ export class Assessment extends React.Component {
                         <span style={{ textAlign: 'center' }}>
 
 
-                            <Label><FaWeightHanging /> {actualWeighting}{this.props.g.weighting}%</Label>
+                            <Label><FaWeightHanging /> {actualWeighting}{this.state.weighting}%</Label>
 
                             <Label><FaClock /> Jun 3</Label>
                         </span>
