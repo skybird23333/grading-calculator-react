@@ -1,9 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 
 import { Subject } from "./routes/Subject";
+import { IndexRoute } from "./routes/Index";
 
 //TODO: Export to a separate util file instead of attaching onto math
 Math.roundTwoDigits = function (num) {
@@ -14,11 +15,12 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <div className="content">
     <div className="content-content">
-      <BrowserRouter>
+      <HashRouter basename="/">
         <Routes>
-          <Route path="/subject" element={<Subject />} />
+          <Route path="" element={<IndexRoute/>} />
+          <Route path="subject" element={<Subject />} />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </div>
   </div>
 );
