@@ -76,7 +76,9 @@ export class Assessment extends React.Component {
               <div style={{ display: "block" }}>
                 <Button
                   onClick={() => {
-                    this.setState({ due: true });
+                    this.setState({ due: true }, () => {
+                      this.props.onAssessmentChange(this.state);
+                    });
                   }}
                   selected={this.state.due}
                 >
@@ -84,7 +86,9 @@ export class Assessment extends React.Component {
                 </Button>
                 <Button
                   onClick={() => {
-                    this.setState({ due: false });
+                    this.setState({ due: false }, () => {
+                      this.props.onAssessmentChange(this.state);
+                    });
                   }}
                   selected={!this.state.due}
                 >
