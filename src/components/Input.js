@@ -17,6 +17,8 @@ export class Input extends React.Component {
           value={this.props.value}
           style={this.props.style}
           onChange={this.props.onChange || null}
+          min={this.props.min}
+          max={this.props.max}
         />
       </span>
     );

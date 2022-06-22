@@ -10,32 +10,44 @@ export class Assessment extends React.Component {
     this.state = this.props.g;
     this.state.key = this.props.keyy;
 
-    this.color = (() => {
-      if (this.state.due) return "#05b3f2";
-      if (this.state.grading >= 80) return "green";
-      if (this.state.grading === 0) return "black";
-      return this.state.grading >= 50 ? "orange" : "red";
-    })();
-
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleWeightChange = this.handleWeightChange.bind(this);
     this.handleGradingChange = this.handleGradingChange.bind(this);
   }
 
   handleNameChange(e) {
-    this.setState({ name: e.target.value });
-    this.props.onAsssessmentChange(this.state);
+    this.setState({ name: e.target.value }, () => {
+      this.props.onAssessmentChange(this.state);
+    });
   }
   handleWeightChange(e) {
-    this.setState({ weighting: e.target.value });
-    this.props.onAsssessmentChange(this.state);
+    if (
+      parseInt(e.target.value) > 100 ||
+      parseInt(e.target.value) < 0
+    )
+      return;
+    this.setState({ weighting: parseInt(e.target.value) || 0 }, () => {
+      this.props.onAssessmentChange(this.state);
+    });
   }
   handleGradingChange(e) {
-    this.setState({ grading: e.target.value });
-    this.props.onAsssessmentChange(this.state);
+    if (
+      parseInt(e.target.value) > 100 ||
+      parseInt(e.target.value) < 0
+    )
+      return;
+    this.setState({ grading: parseInt(e.target.value) || 0 }, () => {
+      this.props.onAssessmentChange(this.state);
+    });
   }
 
   render() {
+    this.color = (() => {
+      if (this.state.due) return "#05b3f2";
+      if (this.state.grading >= 80) return "green";
+      if (this.state.grading === 0) return "black";
+      return this.state.grading >= 50 ? "orange" : "red";
+    })();
     switch (this.props.mode) {
       case "edit":
         return (
@@ -53,8 +65,11 @@ export class Assessment extends React.Component {
             <FaWeightHanging /> Weighting
             <Input
               value={this.state.weighting}
-              style={{ width: 30 }}
+              style={{ width: 60 }}
               onChange={this.handleWeightChange}
+              min="1"
+              max="100"
+              type="number"
             />
             %
             <div style={{ float: "right" }}>
@@ -79,8 +94,11 @@ export class Assessment extends React.Component {
               Grading:
               <Input
                 value={this.state.grading}
-                style={{ width: 30 }}
+                style={{ width: 60 }}
                 onChange={this.handleGradingChange}
+                min="1"
+                max="100"
+                type="number"
               />
               %
             </div>

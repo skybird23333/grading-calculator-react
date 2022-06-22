@@ -27,18 +27,6 @@ var subjectInformation = {
       due: false,
     },
     {
-      name: "Task 4",
-      grading: 64,
-      weighting: 15,
-      due: false,
-    },
-    {
-      name: "Task 5",
-      grading: 100,
-      weighting: 5,
-      due: false,
-    },
-    {
       name: "Exam",
       grading: 80,
       weighting: 30,
@@ -52,6 +40,15 @@ export class Subject extends React.Component {
     super(props);
     this.state = subjectInformation;
 
+    this.calculateInformation();
+
+    this.handleEdit = this.handleEdit.bind(this);
+    this.handleEditSave = this.handleEditSave.bind(this);
+    this.handleAssessmentChange = this.handleAssessmentChange.bind(this);
+    this.calculateInformation = this.calculateInformation.bind(this);
+  }
+
+  calculateInformation() {
     this.currentGradeTotal = 0; //total grading of all assessments, scaled by their weighting
     this.currentWeightTotal = 0; //total weighting of all assessments completed
     this.weightTotal = 0; //total weighting of all assessments regardless of completion
@@ -78,9 +75,6 @@ export class Subject extends React.Component {
       100;
     //the minimum amount of marks required to reach the goal.
     //a variation of the following formula: (cGT + mG(wT-cWT)/10)wT = Goal /10
-
-    this.handleEdit = this.handleEdit.bind(this);
-    this.handleEditSave = this.handleEditSave.bind(this);
   }
 
   handleEdit() {
@@ -93,11 +87,14 @@ export class Subject extends React.Component {
 
   handleAssessmentChange(change) {
     const newAssessmentArray = this.state.assessments;
-    newAssessmentArray[change.key] = this.change;
+    console.log("<Subject> received change:", change);
+    newAssessmentArray[change.key] = change;
     this.setState({ assessments: newAssessmentArray });
   }
 
   render() {
+    this.calculateInformation();
+
     const assessments = this.state.assessments.map((m, i) => {
       return (
         <Assessment
