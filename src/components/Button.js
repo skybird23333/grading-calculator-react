@@ -1,12 +1,15 @@
-import React from 'react';
+import React from "react";
 
 export class Button extends React.Component {
-    render() {
-        return (
-            <button
-            className={`button ${this.props.selected ? ' selected' : ''}`} style={this.props.style} onClick={this.props.onClick}>
-                {this.props.children}
-            </button>
-        );
-    }
+  render() {
+    return (
+      <button
+        className={`button ${this.props.selected ? " selected" : ""}`}
+        style={this.props.style}
+        onClick={this.props.onClick}
+      >
+        {this.props.children}
+      </button>
+    );
+  }
 }
