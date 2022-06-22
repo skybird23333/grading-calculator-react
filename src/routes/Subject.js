@@ -87,7 +87,6 @@ export class Subject extends React.Component {
 
   handleAssessmentChange(change) {
     const newAssessmentArray = this.state.assessments;
-    console.log("<Subject> received change:", change);
     newAssessmentArray[change.key] = change;
     this.setState({ assessments: newAssessmentArray });
   }

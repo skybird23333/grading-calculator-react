@@ -1,5 +1,5 @@
 import React from "react";
-import { FaClock, FaStar, FaWeightHanging } from "react-icons/fa";
+import { FaClock, FaWeightHanging } from "react-icons/fa";
 import { Input } from "./Input";
 import { Label } from "./Label";
 import { Button } from "./Button";
