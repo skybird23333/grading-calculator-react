@@ -11,7 +11,7 @@ var subjectInformation = {
     {
       name: "Task 1",
       grading: 86,
-      weighting: 20,
+      weighting: 40,
       due: false,
     },
     {
@@ -30,7 +30,7 @@ var subjectInformation = {
       name: "Exam",
       grading: 80,
       weighting: 30,
-      due: false,
+      due: true,
     },
   ],
 };
@@ -130,7 +130,7 @@ export class Subject extends React.Component {
           <p>
             You won't able to reach {this.state.goal}%. Scoring <b>full</b>{" "}
             marks in remaining assessments will give you{" "}
-            {Math.ceil(
+            {Math.roundTwoDigits(
               ((this.currentGradeTotal +
                 (this.weightTotal - this.currentWeightTotal)) /
                 this.weightTotal) *
