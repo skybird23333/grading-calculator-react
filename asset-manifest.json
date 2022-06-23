@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/grading-calculator-react/static/css/main.dd113eaa.css",
-    "main.js": "/grading-calculator-react/static/js/main.60601c79.js",
+    "main.js": "/grading-calculator-react/static/js/main.0a8f09f5.js",
     "index.html": "/grading-calculator-react/index.html",
     "main.dd113eaa.css.map": "/grading-calculator-react/static/css/main.dd113eaa.css.map",
-    "main.60601c79.js.map": "/grading-calculator-react/static/js/main.60601c79.js.map"
+    "main.0a8f09f5.js.map": "/grading-calculator-react/static/js/main.0a8f09f5.js.map"
   },
   "entrypoints": [
     "static/css/main.dd113eaa.css",
-    "static/js/main.60601c79.js"
+    "static/js/main.0a8f09f5.js"
   ]
 }
