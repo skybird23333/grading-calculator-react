@@ -7,32 +7,7 @@ var subjectInformation = {
   editing: false,
   name: "Example Subject",
   goal: 90,
-  assessments: [
-    {
-      name: "Task 1",
-      grading: 86,
-      weighting: 40,
-      due: false,
-    },
-    {
-      name: "Task 2",
-      grading: 88.8,
-      weighting: 15,
-      due: false,
-    },
-    {
-      name: "Task 3",
-      grading: 80,
-      weighting: 15,
-      due: false,
-    },
-    {
-      name: "Exam",
-      grading: 80,
-      weighting: 30,
-      due: true,
-    },
-  ],
+  assessments: [],
 };
 
 export class Subject extends React.Component {
@@ -42,9 +17,12 @@ export class Subject extends React.Component {
 
     this.calculateInformation();
 
+    if (!this.state.assessments.length) this.state.editing = true;
+
     this.handleEdit = this.handleEdit.bind(this);
     this.handleEditSave = this.handleEditSave.bind(this);
     this.handleAssessmentChange = this.handleAssessmentChange.bind(this);
+    this.handleAddAssessment = this.handleAddAssessment.bind(this);
     this.calculateInformation = this.calculateInformation.bind(this);
   }
 
@@ -88,6 +66,12 @@ export class Subject extends React.Component {
   handleAssessmentChange(change) {
     const newAssessmentArray = this.state.assessments;
     newAssessmentArray[change.key] = change;
+    this.setState({ assessments: newAssessmentArray });
+  }
+
+  handleAddAssessment() {
+    const newAssessmentArray = this.state.assessments;
+    newAssessmentArray.push({ name: "Assessment", grading: 0, weighting: 0 });
     this.setState({ assessments: newAssessmentArray });
   }
 
@@ -147,7 +131,7 @@ export class Subject extends React.Component {
     let scoreInformation = (
       <div className="card background">
         <h1 style={{ width: "100%" }}>
-          {this.state.name}
+          Grading Calculator
           <Button style={{ float: "right" }} onClick={this.handleEdit}>
             Edit
           </Button>
@@ -191,13 +175,12 @@ export class Subject extends React.Component {
     let editInformation = (
       <div className="card">
         <div style={{ display: "block" }}>
-          <Input
-            value={this.state.name}
-            style={{ fontSize: "xx-large", fontWeight: "bold" }}
-          />
-          <Button style={{ float: "right" }} onClick={this.handleEditSave}>
-            Save
-          </Button>
+          <h1>
+            Editing assessments
+            <Button style={{ float: "right" }} onClick={this.handleEditSave}>
+              Save
+            </Button>
+          </h1>
         </div>
         <div style={{ display: "block" }}>
           Goal: <Input style={{ width: 30 }} /> %
@@ -206,8 +189,27 @@ export class Subject extends React.Component {
       </div>
     );
 
+    let editButton = (
+      <div>
+        <Button style={{ width: "100%" }} onClick={this.handleAddAssessment}>
+          Add Assessment
+        </Button>
+      </div>
+    );
+
     if (this.state.editing) scoreInformation = null;
-    else editInformation = null;
+    else {
+      editInformation = null;
+      editButton = null;
+    }
+
+    let emptyAssessmentsInfo = (
+      <div className="info">
+        <p>There's nothing here! Click "Edit" to start adding assessments</p>
+      </div>
+    );
+    if (this.state.assessments.length || this.state.editing)
+      emptyAssessmentsInfo = null;
 
     return (
       <div>
@@ -216,6 +218,9 @@ export class Subject extends React.Component {
         {editInformation}
 
         {assessments}
+        {emptyAssessmentsInfo}
+
+        {editButton}
       </div>
     );
   }

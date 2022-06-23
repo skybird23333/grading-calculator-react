@@ -21,21 +21,13 @@ export class Assessment extends React.Component {
     });
   }
   handleWeightChange(e) {
-    if (
-      parseInt(e.target.value) > 100 ||
-      parseInt(e.target.value) < 0
-    )
-      return;
+    if (parseInt(e.target.value) > 100 || parseInt(e.target.value) < 0) return;
     this.setState({ weighting: parseInt(e.target.value) || 0 }, () => {
       this.props.onAssessmentChange(this.state);
     });
   }
   handleGradingChange(e) {
-    if (
-      parseInt(e.target.value) > 100 ||
-      parseInt(e.target.value) < 0
-    )
-      return;
+    if (parseInt(e.target.value) > 100 || parseInt(e.target.value) < 0) return;
     this.setState({ grading: parseInt(e.target.value) || 0 }, () => {
       this.props.onAssessmentChange(this.state);
     });
@@ -48,6 +40,7 @@ export class Assessment extends React.Component {
       if (this.state.grading === 0) return "black";
       return this.state.grading >= 50 ? "orange" : "red";
     })();
+
     switch (this.props.mode) {
       case "edit":
         return (
@@ -73,6 +66,8 @@ export class Assessment extends React.Component {
             />
             %
             <div style={{ float: "right" }}>
+              {" "}
+              {/*TODO: float:right makes the right side display incorrectly*/}
               <div style={{ display: "block" }}>
                 <Button
                   onClick={() => {
@@ -103,6 +98,7 @@ export class Assessment extends React.Component {
                 min="1"
                 max="100"
                 type="number"
+                disabled={this.state.due}
               />
               %
             </div>
@@ -152,10 +148,6 @@ export class Assessment extends React.Component {
               <Label>
                 <FaWeightHanging /> {actualWeighting}
                 {this.state.weighting}%
-              </Label>
-
-              <Label>
-                <FaClock /> Jun 3
               </Label>
             </span>
           </div>

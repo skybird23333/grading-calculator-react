@@ -393,8 +393,10 @@ blockquote p {
   filter: brightness(110%);
 }
 
-.button:hover[disabled] {
-  filter: none;
+.input[disabled],
+.button[disabled] {
+  filter: brightness(70%);
+  border: none;
 }
 
 .button-mcpedl {

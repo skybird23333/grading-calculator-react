@@ -19,6 +19,7 @@ export class Input extends React.Component {
           onChange={this.props.onChange || null}
           min={this.props.min}
           max={this.props.max}
+          disabled={this.props.disabled}
         />
       </span>
     );

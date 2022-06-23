@@ -1,3 +1,5 @@
+//i dont know how to use react please spare me
+
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
@@ -17,7 +19,7 @@ root.render(
     <div className="content-content">
       <HashRouter basename="/">
         <Routes>
-          <Route path="" element={<IndexRoute/>} />
+          <Route path="" element={<IndexRoute />} />
           <Route path="subject" element={<Subject />} />
         </Routes>
       </HashRouter>
