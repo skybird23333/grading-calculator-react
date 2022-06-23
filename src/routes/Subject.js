@@ -23,6 +23,7 @@ export class Subject extends React.Component {
     this.handleEditSave = this.handleEditSave.bind(this);
     this.handleAssessmentChange = this.handleAssessmentChange.bind(this);
     this.handleAddAssessment = this.handleAddAssessment.bind(this);
+    this.handleGoalUpdate = this.handleGoalUpdate.bind(this)
     this.calculateInformation = this.calculateInformation.bind(this);
   }
 
@@ -73,6 +74,11 @@ export class Subject extends React.Component {
     const newAssessmentArray = this.state.assessments;
     newAssessmentArray.push({ name: "Assessment", grading: 0, weighting: 0 });
     this.setState({ assessments: newAssessmentArray });
+  }
+
+  handleGoalUpdate(e) {
+    if (parseInt(e.target.value) > 100 || parseInt(e.target.value) < 0) return;
+    this.setState({ goal: parseInt(e.target.value) || 0 });
   }
 
   render() {
@@ -183,7 +189,11 @@ export class Subject extends React.Component {
           </h1>
         </div>
         <div style={{ display: "block" }}>
-          Goal: <Input style={{ width: 30 }} /> %
+          Goal: <Input 
+          style={{ width: 30 }} 
+          value={this.state.goal}
+          onChange={this.handleGoalUpdate}
+          /> %
         </div>
         TIP: Use tab and shift + tab to cycle through inputs!
       </div>
