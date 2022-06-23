@@ -21,9 +21,9 @@ export class IndexRoute extends React.Component {
   render() {
     const commitInfo = this.state.commits.map(c => {
       return <div className="card" key={c.sha}>
-          <Link className="link" to={c.commit.url}>
+          <a className="link" href={c.commit.url}>
             {c.sha.slice(0, 6)}
-          </Link>
+          </a>
           {" -"} {c.commit.message}
       </div>
     })
