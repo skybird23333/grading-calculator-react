@@ -54,60 +54,63 @@ export class Assessment extends React.Component {
                 style={{ fontSize: "large", fontWeight: "bold" }}
                 onChange={this.handleNameChange}
               />
-            </div>
-            <FaWeightHanging /> Weighting
-            <Input
-              value={this.state.weighting}
-              style={{ width: 60 }}
-              onChange={this.handleWeightChange}
-              min="1"
-              max="100"
-              type="number"
-            />
-            %
-            <div style={{ float: "right" }}>
-              {" "}
-              {/*TODO: float:right makes the right side display incorrectly*/}
-              <div style={{ display: "block" }}>
-                <Button
-                  onClick={() => {
-                    this.setState({ due: true }, () => {
-                      this.props.onAssessmentChange(this.state);
-                    });
-                  }}
-                  selected={this.state.due}
-                >
-                  Due
-                </Button>
-                <Button
-                  onClick={() => {
-                    this.setState({ due: false }, () => {
-                      this.props.onAssessmentChange(this.state);
-                    });
-                  }}
-                  selected={!this.state.due}
-                >
-                  Complete
-                </Button>
+              <div
+                style={{ display: 'grid', gridTemplateColumns: 'auto auto' }}
+              >
+                <div>
+                  <FaWeightHanging /> Weighting
+                  <Input
+                    value={this.state.weighting}
+                    style={{ width: 60 }}
+                    onChange={this.handleWeightChange}
+                    min="1"
+                    max="100"
+                    type="number"
+                  />
+                  %
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ display: "block" }}>
+                    <Button
+                      onClick={() => {
+                        this.setState({ due: true }, () => {
+                          this.props.onAssessmentChange(this.state);
+                        });
+                      }}
+                      selected={this.state.due}
+                    >
+                      Due
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        this.setState({ due: false }, () => {
+                          this.props.onAssessmentChange(this.state);
+                        });
+                      }}
+                      selected={!this.state.due}
+                    >
+                      Complete
+                    </Button>
+                  </div>
+                  Grading:
+                  <Input
+                    value={this.state.grading}
+                    style={{ width: 60 }}
+                    onChange={this.handleGradingChange}
+                    min="1"
+                    max="100"
+                    type="number"
+                    disabled={this.state.due}
+                  />
+                  %
+                </div>
               </div>
-              Grading:
-              <Input
-                value={this.state.grading}
-                style={{ width: 60 }}
-                onChange={this.handleGradingChange}
-                min="1"
-                max="100"
-                type="number"
-                disabled={this.state.due}
-              />
-              %
             </div>
           </div>
         );
       default:
-        let actualWeighting = `${
-          Math.roundTwoDigits(this.state.grading * this.state.weighting) / 100
-        }%/`;
+        let actualWeighting = `${Math.roundTwoDigits(this.state.grading * this.state.weighting) / 100
+          }%/`;
 
         const marks = this.state.due
           ? "Due assessment"
