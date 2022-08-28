@@ -37,7 +37,7 @@ export class Assessment extends React.Component {
     this.color = (() => {
       if (this.state.due) return "#05b3f2";
       if (this.state.grading >= 80) return "green";
-      if (this.state.grading === 0) return "black";
+      if (this.state.grading === 0) return "none";
       return this.state.grading >= 50 ? "orange" : "red";
     })();
 
