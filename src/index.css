@@ -336,7 +336,7 @@ blockquote p {
 }
 
 .input {
-  background-color: var(--background-tertiary);
+  background-color: var(--background-secondary);
   color: var(--foreground-primary);
   box-shadow: none;
   padding: 7px;
@@ -444,4 +444,20 @@ blockquote p {
 .prog-content-large {
   background-color: var(--foreground-primary);
   height: 15px;
+}
+
+.select {
+  margin: 5px;
+  padding: 7px;
+  background-color: var(--background-tertiary);
+  color: var(--foreground-primary);
+  border-radius: 4px;
+  border: 1px solid var(--foreground-border);
+}
+
+.select option {
+  padding: 7px;
+  background-color: var(--background-secondary);
+  color: var(--foreground-primary);
+  border-radius: 4px;
 }
