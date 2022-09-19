@@ -96,11 +96,20 @@ export class Subject extends React.Component {
       );
     });
 
-    const allocationWarning = this.unallocatedWeight ? (
+    const underAllocationWarning = (this.unallocatedWeight > 0) ? (
       <div className="error">
         <p>
           There are <b>{this.unallocatedWeight}%</b> of the total weighting left
           unallocated for. Check that you have filled in all assessments.
+        </p>
+      </div>
+    ) : null;
+
+    const overAllocationWarning = (this.unallocatedWeight < 0) ? (
+      <div className="error">
+        <p>
+          Looks like you allocated <b>{-this.unallocatedWeight}%</b> too much for
+          the weighting! Check that your weightings are correct.
         </p>
       </div>
     ) : null;
@@ -173,7 +182,8 @@ export class Subject extends React.Component {
           </div>
         </div>
         {minimumScore}
-        {allocationWarning}
+        {underAllocationWarning}
+        {overAllocationWarning}
         <h3>{this.completedAssessmentCount} Assessments Completed</h3>
       </div>
     );
