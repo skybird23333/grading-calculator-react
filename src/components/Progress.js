@@ -9,9 +9,6 @@ export class Progress extends React.Component {
      * @param {string} [props.color] Color in CSS format
      * @param {boolean} [props.large] Large progress bar?
      */
-    constructor(props) {
-        super(props)
-    }
     
     render() {
         this.progressContentClassName = this.props.large ? "prog-content-large" : "prog-content"

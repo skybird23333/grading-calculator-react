@@ -35,7 +35,7 @@ export class Assessment extends React.Component {
     });
   }
   handleStatusChange(i) {
-    this.setState({due: !!(i == 1)})
+    this.setState({due: !!(i === 1)})
   }
 
   render() {
