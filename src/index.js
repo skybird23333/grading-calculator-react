@@ -7,6 +7,7 @@ import { HashRouter, Routes, Route } from "react-router-dom";
 
 import { Subject } from "./routes/Subject";
 import { IndexRoute } from "./routes/Index";
+import { ComponentTest } from "./routes/ComponentTest";
 
 //TODO: Export to a separate util file instead of attaching onto math
 Math.roundTwoDigits = function (num) {
@@ -21,6 +22,7 @@ root.render(
         <Routes>
           <Route path="" element={<IndexRoute />} />
           <Route path="subject" element={<Subject />} />
+          <Route path="test" element={<ComponentTest />} />
         </Routes>
       </HashRouter>
     </div>
