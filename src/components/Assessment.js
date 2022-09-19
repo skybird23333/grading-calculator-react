@@ -2,7 +2,7 @@ import React from "react";
 import { FaWeightHanging } from "react-icons/fa";
 import { Input } from "./Input";
 import { Label } from "./Label";
-import { Button } from "./Button";
+import { Select } from "./SingleSelect";
 
 export class Assessment extends React.Component {
   constructor(props) {
@@ -13,6 +13,7 @@ export class Assessment extends React.Component {
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleWeightChange = this.handleWeightChange.bind(this);
     this.handleGradingChange = this.handleGradingChange.bind(this);
+    this.handleStatusChange = this.handleStatusChange.bind(this);
   }
 
   handleNameChange(e) {
@@ -31,6 +32,9 @@ export class Assessment extends React.Component {
     this.setState({ grading: parseInt(e.target.value) || 0 }, () => {
       this.props.onAssessmentChange(this.state);
     });
+  }
+  handleStatusChange(i) {
+    this.setState({due: !!(i == 1)})
   }
 
   render() {
@@ -71,26 +75,19 @@ export class Assessment extends React.Component {
                 </div>
                 <div style={{ textAlign: 'right' }}>
                   <div style={{ display: "block" }}>
-                    <Button
-                      onClick={() => {
-                        this.setState({ due: true }, () => {
-                          this.props.onAssessmentChange(this.state);
-                        });
-                      }}
-                      selected={this.state.due}
+                    Status: 
+                    <Select
+                      options={[
+                        {name: 'Due', value: 1},
+                        {name: 'Complete', value: 0}
+                      ]}
+
+                      onChange={this.handleStatusChange}
+
+                      value={this.state.due ? 1 : 0}
                     >
-                      Due
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        this.setState({ due: false }, () => {
-                          this.props.onAssessmentChange(this.state);
-                        });
-                      }}
-                      selected={!this.state.due}
-                    >
-                      Complete
-                    </Button>
+
+                    </Select>
                   </div>
                   Grading:
                   <Input
