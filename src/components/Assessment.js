@@ -35,7 +35,9 @@ export class Assessment extends React.Component {
     });
   }
   handleStatusChange(i) {
-    this.setState({due: !!(i === 1)})
+    console.log(i)
+    // eslint-disable-next-line
+    this.setState({due: (i == 1)})
   }
 
   render() {
@@ -87,7 +89,6 @@ export class Assessment extends React.Component {
 
                       value={this.state.due ? 1 : 0}
                     >
-
                     </Select>
                   </div>
                   Grading:
