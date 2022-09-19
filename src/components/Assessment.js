@@ -24,13 +24,13 @@ export class Assessment extends React.Component {
   }
   handleWeightChange(e) {
     if (parseInt(e.target.value) > 100 || parseInt(e.target.value) < 0) return;
-    this.setState({ weighting: parseInt(e.target.value) || 0 }, () => {
+    this.setState({ weighting: parseFloat(e.target.value) || 0 }, () => {
       this.props.onAssessmentChange(this.state);
     });
   }
   handleGradingChange(e) {
     if (parseInt(e.target.value) > 100 || parseInt(e.target.value) < 0) return;
-    this.setState({ grading: parseInt(e.target.value) || 0 }, () => {
+    this.setState({ grading: parseFloat(e.target.value) || 0 }, () => {
       this.props.onAssessmentChange(this.state);
     });
   }
