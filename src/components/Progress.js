@@ -15,7 +15,7 @@ export class Progress extends React.Component {
     
     render() {
         this.progressContentClassName = this.props.large ? "prog-content-large" : "prog-content"
-        this.progressPercentage = this.props.val / this.props.max * 100
+        this.progressPercentage = (this.props.val / this.props.max) * 100
 
         return(
             <div className="prog-container">

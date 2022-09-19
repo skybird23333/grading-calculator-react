@@ -2,6 +2,7 @@ import React from "react";
 import { FaWeightHanging } from "react-icons/fa";
 import { Input } from "./Input";
 import { Label } from "./Label";
+import { Progress } from "./Progress";
 import { Select } from "./SingleSelect";
 
 export class Assessment extends React.Component {
@@ -114,15 +115,7 @@ export class Assessment extends React.Component {
           : `${this.state.grading}%`;
 
         const progressbar = this.state.due ? null : (
-          <div className="prog-container">
-            <div
-              className="prog-content"
-              style={{
-                width: this.state.grading + "%",
-                background: this.color,
-              }}
-            ></div>
-          </div>
+          <Progress max={100} val={this.state.grading} color={this.color}></Progress>
         );
 
         if (this.state.due) {

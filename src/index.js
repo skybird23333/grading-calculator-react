@@ -3,7 +3,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import { HashRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route, Link } from "react-router-dom";
 
 import { Subject } from "./routes/Subject";
 import { IndexRoute } from "./routes/Index";
@@ -16,15 +16,26 @@ Math.roundTwoDigits = function (num) {
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <div className="content">
-    <div className="content-content">
-      <HashRouter basename="/">
+  <div style={{ height: 0 }}>
+
+
+    <HashRouter basename="/">
+      <div className="navbar">
+        <div className="navbar-content">
+          <span className="site-name">
+            <Link to="/">
+              gradings-calculator-react
+            </Link>
+          </span>
+        </div>
+      </div>
+      <div className="content">
         <Routes>
           <Route path="" element={<IndexRoute />} />
           <Route path="subject" element={<Subject />} />
           <Route path="test" element={<ComponentTest />} />
         </Routes>
-      </HashRouter>
-    </div>
+      </div>
+    </HashRouter>
   </div>
 );

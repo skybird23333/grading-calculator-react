@@ -124,7 +124,7 @@ export class Subject extends React.Component {
               ((this.currentGradeTotal +
                 (this.weightTotal - this.currentWeightTotal)) /
                 this.weightTotal) *
-                100
+              100
             )}
             %.
           </p>
@@ -135,7 +135,7 @@ export class Subject extends React.Component {
     if (!(this.weightTotal - this.currentWeightTotal)) minimumScore = null;
 
     let scoreInformation = (
-      <div className="card background">
+      <div>
         <h1 style={{ width: "100%" }}>
           Grading Calculator
           <Button style={{ float: "right" }} onClick={this.handleEdit}>
@@ -179,7 +179,7 @@ export class Subject extends React.Component {
     );
 
     let editInformation = (
-      <div className="card">
+      <div>
         <div style={{ display: "block" }}>
           <h1>
             Editing assessments
@@ -189,10 +189,10 @@ export class Subject extends React.Component {
           </h1>
         </div>
         <div style={{ display: "block" }}>
-          Goal: <Input 
-          style={{ width: 30 }} 
-          value={this.state.goal}
-          onChange={this.handleGoalUpdate}
+          Goal: <Input
+            style={{ width: 30 }}
+            value={this.state.goal}
+            onChange={this.handleGoalUpdate}
           /> %
         </div>
         TIP: Use tab and shift + tab to cycle through inputs!
@@ -223,9 +223,13 @@ export class Subject extends React.Component {
 
     return (
       <div>
-        {scoreInformation}
 
-        {editInformation}
+        <div className="content-header">
+          {scoreInformation}
+          {editInformation}
+
+        </div>
+
 
         {assessments}
         {emptyAssessmentsInfo}

@@ -21,24 +21,23 @@ export class IndexRoute extends React.Component {
   render() {
     const commitInfo = this.state.commits.map(c => {
       return <div className="card" key={c.sha}>
-          <a className="link" href={c.html_url}>
-            {c.sha.slice(0, 6)}
-          </a>
-          {" -"} {c.commit.message}
+        <a className="link" href={c.html_url}>
+          {c.sha.slice(0, 6)}
+        </a>
+        {" -"} {c.commit.message}
       </div>
     })
 
     return (
       <div>
-        <div className="card background">
-          skybird23333
+        <div className="content-header">
+          skybird2333/
           <h1>react-grading-calculator</h1>
           <Link className="link" to="/subject">
             Go to the app(beta)
           </Link>
-
         </div>
-        <div className="card background">
+        <div className="content-content">
           <h1>
             Latest Commits
           </h1>
