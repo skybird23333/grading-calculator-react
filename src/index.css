@@ -89,7 +89,7 @@ body {
   padding: 20px 20px;
   background-color: var(--background-primary);
   padding-top: 75px;
-  border-bottom: 1px solid var(--foreground-border);
+  border: 1px solid var(--foreground-border);
 }
 
 .content-header h1 {
@@ -121,7 +121,6 @@ h3 {
   background-color: var(--background-primary);
   z-index: -1000;
   position: relative;
-  border: 1px solid var(--foreground-border);
   border-top: none;
   padding-bottom: 50px;
 }

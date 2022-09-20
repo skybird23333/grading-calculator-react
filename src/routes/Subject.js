@@ -17,8 +17,6 @@ export class Subject extends React.Component {
 
     this.calculateInformation();
 
-    if (!this.state.assessments.length) this.state.editing = true;
-
     this.handleEdit = this.handleEdit.bind(this);
     this.handleEditSave = this.handleEditSave.bind(this);
     this.handleAssessmentChange = this.handleAssessmentChange.bind(this);
@@ -62,6 +60,7 @@ export class Subject extends React.Component {
 
   handleEditSave() {
     this.setState({ editing: false });
+    this.calculateInformation()
   }
 
   handleAssessmentChange(change) {
@@ -72,7 +71,7 @@ export class Subject extends React.Component {
 
   handleAddAssessment() {
     const newAssessmentArray = this.state.assessments;
-    newAssessmentArray.push({ name: "Assessment", grading: 0, weighting: 0 });
+    newAssessmentArray.push({ name: `Assessment ${newAssessmentArray.length}`, grading: 0, weighting: 0 });
     this.setState({ assessments: newAssessmentArray });
   }
 
@@ -145,12 +144,12 @@ export class Subject extends React.Component {
 
     let scoreInformation = (
       <div>
-        <h1 style={{ width: "100%" }}>
+        <h2 style={{ width: "100%" }}>
           Grading Calculator
           <Button style={{ float: "right" }} onClick={this.handleEdit}>
             Edit
           </Button>
-        </h1>
+        </h2>
         Currently {Math.roundTwoDigits(this.currentGrade)}% (
         {Math.roundTwoDigits(this.currentGradeTotal)}% out of the{" "}
         {Math.roundTwoDigits(this.currentWeightTotal)}% available)
@@ -191,12 +190,12 @@ export class Subject extends React.Component {
     let editInformation = (
       <div>
         <div style={{ display: "block" }}>
-          <h1>
+          <h2>
             Editing assessments
-            <Button style={{ float: "right" }} onClick={this.handleEditSave}>
+            <Button style={{ float: "right", background: "green" }} onClick={this.handleEditSave}>
               Save
             </Button>
-          </h1>
+          </h2>
         </div>
         <div style={{ display: "block" }}>
           Goal: <Input
@@ -225,7 +224,7 @@ export class Subject extends React.Component {
 
     let emptyAssessmentsInfo = (
       <div className="info">
-        <p>There's nothing here! Click "Edit" to start adding assessments</p>
+        <p>There's nothing here! Click "Edit" to start adding assessments.</p>
       </div>
     );
     if (this.state.assessments.length || this.state.editing)
