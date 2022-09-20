@@ -38,8 +38,9 @@ export class Assessment extends React.Component {
     console.log(i)
     // eslint-disable-next-line
     this.setState({due: (i == 1)})
+    this.props.onAssessmentChange(this.state);
   }
-
+  
   render() {
     this.color = (() => {
       if (this.state.due) return "#05b3f2";
