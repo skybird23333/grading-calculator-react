@@ -10,6 +10,7 @@ export class Assessment extends React.Component {
     super(props);
     this.state = this.props.g;
     this.state.key = this.props.keyy;
+    this.state.mode = undefined
 
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleWeightChange = this.handleWeightChange.bind(this);
@@ -23,24 +24,30 @@ export class Assessment extends React.Component {
     });
   }
   handleWeightChange(e) {
-    if (parseInt(e.target.value) > 100 || parseInt(e.target.value) < 0) return;
-    this.setState({ weighting: parseFloat(e.target.value) || 0 }, () => {
+    const targetValue = this.sanitizeNumberInput(e.target.value)
+    if (targetValue == -1 ) return
+    this.setState({ weighting: targetValue }, () => {
       this.props.onAssessmentChange(this.state);
     });
   }
   handleGradingChange(e) {
-    if (parseInt(e.target.value) > 100 || parseInt(e.target.value) < 0) return;
-    this.setState({ grading: parseFloat(e.target.value) || 0 }, () => {
+    const targetValue = this.sanitizeNumberInput(e.target.value)
+    if (targetValue == -1 ) return
+    this.setState({ grading: targetValue }, () => {
       this.props.onAssessmentChange(this.state);
     });
+  }
+  sanitizeNumberInput(n) {
+    if (parseInt(n) > 100 || parseInt(n) < 0) return -1;
+    return n
   }
   handleStatusChange(i) {
     console.log(i)
     // eslint-disable-next-line
-    this.setState({due: (i == 1)})
+    this.setState({ due: (i == 1) })
     this.props.onAssessmentChange(this.state);
   }
-  
+
   render() {
     this.color = (() => {
       if (this.state.due) return "#05b3f2";
@@ -48,6 +55,13 @@ export class Assessment extends React.Component {
       if (this.state.grading === 0) return "none";
       return this.state.grading >= 50 ? "orange" : "red";
     })();
+
+    if(this.props.mode != this.state.mode) {
+      if(!this.state.grading) this.state.grading = 0
+      if(!this.state.weighting) this.state.weighting = 0
+      this.setState({mode: this.props.mode})
+    }
+
 
     switch (this.props.mode) {
       case "edit":
@@ -63,7 +77,7 @@ export class Assessment extends React.Component {
                 onChange={this.handleNameChange}
               />
               <div
-                style={{ display: 'grid', gridTemplateColumns: 'auto auto' }}
+                style={{ display: 'grid', gridTemplateColumns: 'auto auto auto' }}
               >
                 <div>
                   <FaWeightHanging /> Weighting
@@ -77,21 +91,21 @@ export class Assessment extends React.Component {
                   />
                   %
                 </div>
-                <div style={{ textAlign: 'right' }}>
-                  <div style={{ display: "block" }}>
-                    Status: 
-                    <Select
-                      options={[
-                        {name: 'Due', value: 1},
-                        {name: 'Complete', value: 0}
-                      ]}
+                <div style={{ display: "block" }}>
+                  Status:
+                  <Select
+                    options={[
+                      { name: 'Due', value: 1 },
+                      { name: 'Complete', value: 0 }
+                    ]}
 
-                      onChange={this.handleStatusChange}
+                    onChange={this.handleStatusChange}
 
-                      value={this.state.due ? 1 : 0}
-                    >
-                    </Select>
-                  </div>
+                    value={this.state.due ? 1 : 0}
+                  >
+                  </Select>
+                </div>
+                <div>
                   Grading:
                   <Input
                     value={this.state.grading}
