@@ -18,6 +18,14 @@ export class Assessment extends React.Component {
     this.handleStatusChange = this.handleStatusChange.bind(this);
   }
 
+  componentDidUpdate() {
+    if(this.props.mode !== this.state.mode) {
+      if(!this.state.grading) this.setState({grading: 0})
+      if(!this.state.weighting) this.setState({weighting: 0})
+      this.setState({mode: this.props.mode})
+    }
+  }
+  
   handleNameChange(e) {
     this.setState({ name: e.target.value }, () => {
       this.props.onAssessmentChange(this.state);
@@ -25,14 +33,14 @@ export class Assessment extends React.Component {
   }
   handleWeightChange(e) {
     const targetValue = this.sanitizeNumberInput(e.target.value)
-    if (targetValue == -1 ) return
+    if (targetValue === -1 ) return
     this.setState({ weighting: targetValue }, () => {
       this.props.onAssessmentChange(this.state);
     });
   }
   handleGradingChange(e) {
     const targetValue = this.sanitizeNumberInput(e.target.value)
-    if (targetValue == -1 ) return
+    if (targetValue === -1 ) return
     this.setState({ grading: targetValue }, () => {
       this.props.onAssessmentChange(this.state);
     });
@@ -47,7 +55,7 @@ export class Assessment extends React.Component {
     this.setState({ due: (i == 1) })
     this.props.onAssessmentChange(this.state);
   }
-
+  
   render() {
     this.color = (() => {
       if (this.state.due) return "#05b3f2";
@@ -55,14 +63,8 @@ export class Assessment extends React.Component {
       if (this.state.grading === 0) return "none";
       return this.state.grading >= 50 ? "orange" : "red";
     })();
-
-    if(this.props.mode != this.state.mode) {
-      if(!this.state.grading) this.state.grading = 0
-      if(!this.state.weighting) this.state.weighting = 0
-      this.setState({mode: this.props.mode})
-    }
-
-
+    
+    
     switch (this.props.mode) {
       case "edit":
         return (
@@ -77,7 +79,7 @@ export class Assessment extends React.Component {
                 onChange={this.handleNameChange}
               />
               <div
-                style={{ display: 'grid', gridTemplateColumns: 'auto auto auto' }}
+                className="assessment-input-grid"
               >
                 <div>
                   <FaWeightHanging /> Weighting
