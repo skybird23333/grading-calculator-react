@@ -39,7 +39,7 @@ export class Assessment extends React.Component {
   }
   sanitizeNumberInput(n) {
     if (parseInt(n) > 100 || parseInt(n) < 0) return -1;
-    return n
+    return parseInt(n)
   }
   handleStatusChange(i) {
     console.log(i)
