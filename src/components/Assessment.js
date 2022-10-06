@@ -11,6 +11,7 @@ export class Assessment extends React.Component {
     this.state = this.props.g;
     this.state.key = this.props.keyy;
     this.state.mode = undefined
+    this.state.due = this.props.g.due || false
 
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleWeightChange = this.handleWeightChange.bind(this);
@@ -50,10 +51,10 @@ export class Assessment extends React.Component {
     return parseInt(n)
   }
   handleStatusChange(i) {
-    console.log(i)
     // eslint-disable-next-line
-    this.setState({ due: (i == 1) })
-    this.props.onAssessmentChange(this.state);
+    this.setState({ due: (i == 1) }, () => {
+      this.props.onAssessmentChange(this.state);
+    })
   }
   
   render() {
