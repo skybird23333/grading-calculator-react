@@ -52,8 +52,8 @@ export class Assessment extends React.Component {
     });
   }
   sanitizeNumberInput(n) {
-    if (parseInt(n) > 100 || parseInt(n) < 0) return -1;
-    return parseInt(n)
+    if (parseFloat(n) > 100 || parseFloat(n) < 0) return -1;
+    return parseFloat(n)
   }
   handleStatusChange(i) {
     this.props.onAssessmentChange({
