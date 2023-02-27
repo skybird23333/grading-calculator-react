@@ -6,8 +6,26 @@ import { Input } from "../components/Input";
 var subjectInformation = {
   editing: false,
   name: "Example Subject",
-  goal: 90,
-  assessments: [],
+  goal: 80,
+  assessments: [
+    {
+      name: 'Example Assessment 1',
+      due: false,
+      grading: 86,
+      weighting: 30,
+    },
+    {
+      name: 'Example Assessment 2',
+      due: false,
+      grading: 68,
+      weighting: 30,
+    },
+    {
+      name: 'Example Assessment 3',
+      due: true,
+      weighting: 40,
+    }
+  ],
 };
 
 export class Subject extends React.Component {
@@ -21,6 +39,7 @@ export class Subject extends React.Component {
     this.handleEditSave = this.handleEditSave.bind(this);
     this.handleAssessmentChange = this.handleAssessmentChange.bind(this);
     this.handleAddAssessment = this.handleAddAssessment.bind(this);
+    this.handleDeleteAssessment = this.handleDeleteAssessment.bind(this)
     this.handleGoalUpdate = this.handleGoalUpdate.bind(this)
     this.calculateInformation = this.calculateInformation.bind(this);
   }
@@ -65,7 +84,10 @@ export class Subject extends React.Component {
 
   handleAssessmentChange(change) {
     const newAssessmentArray = this.state.assessments;
-    newAssessmentArray[change.key] = change;
+    newAssessmentArray[change.key] = Object.assign(
+      newAssessmentArray[change.key],
+      change
+    )
     this.setState({ assessments: newAssessmentArray });
   }
 
@@ -73,6 +95,13 @@ export class Subject extends React.Component {
     const newAssessmentArray = this.state.assessments;
     newAssessmentArray.push({ name: `Assessment ${newAssessmentArray.length}`, grading: 0, weighting: 0 });
     this.setState({ assessments: newAssessmentArray });
+  }
+
+  handleDeleteAssessment(i) {
+    const newAssessmentArray = this.state.assessments
+    newAssessmentArray.splice(i, 1)
+    console.log(newAssessmentArray.map(e => e.name))
+    this.setState({ assessments: newAssessmentArray })
   }
 
   handleGoalUpdate(e) {
@@ -91,6 +120,7 @@ export class Subject extends React.Component {
           g={m}
           mode={this.state.editing ? "edit" : null}
           onAssessmentChange={this.handleAssessmentChange}
+          onAssessmentDelete={this.handleDeleteAssessment}
         />
       );
     });
@@ -150,9 +180,9 @@ export class Subject extends React.Component {
             Edit
           </Button>
         </h2>
-        Currently {Math.roundTwoDigits(this.currentGrade)}% (
-        {Math.roundTwoDigits(this.currentGradeTotal)}% out of the{" "}
-        {Math.roundTwoDigits(this.currentWeightTotal)}% available)
+        Your current grade is {Math.roundTwoDigits(this.currentGrade)}% (
+        {Math.roundTwoDigits(this.currentGradeTotal)}% scored out of {" "}
+        {Math.roundTwoDigits(this.currentWeightTotal)}% from completed assessments)
         <div className="prog-container">
           <div
             className="prog-content-large"
@@ -183,7 +213,7 @@ export class Subject extends React.Component {
         {minimumScore}
         {underAllocationWarning}
         {overAllocationWarning}
-        <h3>{this.completedAssessmentCount} Assessments Completed</h3>
+        <h3>{this.completedAssessmentCount}/{this.totalAssessmentCount} Assessments Completed</h3>
       </div>
     );
 
