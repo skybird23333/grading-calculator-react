@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { FaWeightHanging } from "react-icons/fa";
 import { Button } from "./Button";
 import { Input } from "./Input";
@@ -57,7 +57,7 @@ export class Assessment extends React.Component {
   }
   handleStatusChange(i) {
     this.props.onAssessmentChange({
-      due: (i == 1),
+      due: (i === 1),
       key: this.state.key
     });
   }
