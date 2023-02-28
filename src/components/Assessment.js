@@ -1,5 +1,5 @@
 import React from "react";
-import { FaWeightHanging } from "react-icons/fa";
+import { FaCalendar, FaWeightHanging } from "react-icons/fa";
 import { Button } from "./Button";
 import { Input } from "./Input";
 import { Label } from "./Label";
@@ -56,8 +56,11 @@ export class Assessment extends React.Component {
     return parseFloat(n)
   }
   handleStatusChange(i) {
+    console.log(i)
     this.props.onAssessmentChange({
-      due: (i === 1),
+      // eslint-disable-next-line
+      due: (i == 1),
+      //i hate eslint
       key: this.state.key
     });
   }
@@ -160,7 +163,7 @@ export class Assessment extends React.Component {
               style={{ background: "grey", width: "95%", height: "100%" }}
             ></div>
 
-            <h3>{this.props.g.name} </h3>
+            <h3><FaCalendar />{this.props.g.name} </h3>
 
             {progressbar}
 
