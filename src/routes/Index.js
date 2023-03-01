@@ -4,30 +4,6 @@ import { Button } from "../components/Button";
 import { SubjectComponent } from '../components/SubjectComponent'
 import { createSubject, getAllSubjects } from "../utils/storagehelper";
 
-var subjectInformation = {
-  name: "Example Subject",
-  goal: 75,
-  assessments: [
-    {
-      name: 'Example Assessment 1',
-      due: false,
-      grading: 86,
-      weighting: 50,
-    },
-    {
-      name: 'Example Assessment 2',
-      due: false,
-      grading: 68,
-      weighting: 20,
-    },
-    {
-      name: 'Example Assessment 3',
-      due: true,
-      weighting: 30,
-    }
-  ],
-};
-
 export function IndexRoute() {
 
   const [subjects, setSubjects] = useState(getAllSubjects())

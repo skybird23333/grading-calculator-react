@@ -118,7 +118,7 @@ export function updateSubject(id, data) {
 
 export function removeSubject(id) {
     const index = getAllSubjectIds()
-    localStorage.setItem('index', JSON.stringify(index.filter(i => i != id)))
+    localStorage.setItem('index', JSON.stringify(index.filter(i => i !== id)))
     return localStorage.removeItem(id)
 }
 
