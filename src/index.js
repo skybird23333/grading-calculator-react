@@ -5,9 +5,10 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import { HashRouter, Routes, Route, Link } from "react-router-dom";
 
-import { Subject } from "./routes/Subject";
+import { Subject } from "./routes/SubjectPage";
 import { IndexRoute } from "./routes/Index";
 import { ComponentTest } from "./routes/ComponentTest";
+import withRouter from "./utils/withRouterProp";
 
 //TODO: Export to a separate util file instead of attaching onto math
 Math.roundTwoDigits = function (num) {
@@ -15,9 +16,11 @@ Math.roundTwoDigits = function (num) {
 };
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
+const SubjectWithRouter = withRouter(Subject)
+
 root.render(
   <div style={{ height: 0 }}>
-
 
     <HashRouter basename="/">
       <div className="navbar">
@@ -33,6 +36,7 @@ root.render(
         <Routes>
           <Route path="" element={<IndexRoute />} />
           <Route path="subject" element={<Subject />} />
+          <Route path="subjects/:subjectId" element={<SubjectWithRouter />} />
           <Route path="test" element={<ComponentTest />} />
         </Routes>
       </div>

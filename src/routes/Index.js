@@ -1,49 +1,65 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { v4 } from "uuid";
+import { Button } from "../components/Button";
+import { SubjectComponent } from '../components/SubjectComponent'
+import { createSubject, getAllSubjects } from "../utils/storagehelper";
 
-export class IndexRoute extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      commits: []
+var subjectInformation = {
+  name: "Example Subject",
+  goal: 75,
+  assessments: [
+    {
+      name: 'Example Assessment 1',
+      due: false,
+      grading: 86,
+      weighting: 50,
+    },
+    {
+      name: 'Example Assessment 2',
+      due: false,
+      grading: 68,
+      weighting: 20,
+    },
+    {
+      name: 'Example Assessment 3',
+      due: true,
+      weighting: 30,
     }
+  ],
+};
 
-    this.fetchCommitInformation()
-  }
+export function IndexRoute() {
 
-  async fetchCommitInformation() {
-    const commitData = await fetch('https://api.github.com/repos/skybird23333/grading-calculator-react/commits')
-    this.setState({
-      commits: (await commitData.json()).slice(0, 6)
-    })
-  }
+  const [subjects, setSubjects] = useState(getAllSubjects())
 
-  render() {
-    const commitInfo = this.state.commits.map(c => {
-      return <div className="card" key={c.sha}>
-        <a className="link" href={c.html_url}>
-          {c.sha.slice(0, 6)}
-        </a>
-        {" -"} {c.commit.message}
-      </div>
+  const handleAddSubject = () => {
+    createSubject({
+      name: 'New Subject',
+      goal: 100,
+      assessments: []
     })
 
-    return (
-      <div>
-        <div className="content-header">
-          skybird2333/
-          <h1>react-grading-calculator</h1>
-          <Link className="link" to="/subject">
-            Go to the app(beta)
-          </Link>
-        </div>
-        <div className="content-content">
-          <h1>
-            Latest Commits
-          </h1>
-          {commitInfo}
+    setSubjects(getAllSubjects())
+  }
+
+  return (
+    <div>
+      <div className="content-header">
+        <h2>All Subjects</h2>
+      </div>
+      <div className="content-content">
+        {
+          subjects.map(s => {
+              return <SubjectComponent subject={s[0]} id={s[1]} key={v4()}></SubjectComponent>
+            }
+          )
+        }
+        <div>
+          <Button style={{ width: "100%" }} onClick={handleAddSubject}>
+            Add Subject
+          </Button>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 }

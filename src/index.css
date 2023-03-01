@@ -118,7 +118,6 @@ h3 {
   max-width: 50%;
   min-width: 1000px;
   margin: auto;
-  background-color: var(--background-primary);
   z-index: -1000;
   position: relative;
   border-top: none;
@@ -260,12 +259,12 @@ h6 {
   cursor: pointer;
 }
 
-.card-header.active::before {
+.card-collapsible .card-header.active::before {
   content: "+";
   transform: rotate(45deg);
 }
 
-.card-header::before {
+.card-collapsible .card-header::before {
   transition: transform 0.4s;
   content: "+";
 }
@@ -439,7 +438,7 @@ blockquote p {
 }
 
 .prog-container {
-  background-color: var(--background-tertiary);
+  background-color: var(--background-primary);
   margin-top: 10px;
   margin-bottom: 10px;
 }
@@ -452,6 +451,10 @@ blockquote p {
 .prog-content-large {
   background-color: var(--foreground-primary);
   height: 15px;
+}
+
+.prog-container, .prog-content-large {
+  transition: all 0.4s;
 }
 
 .select {
@@ -811,7 +814,7 @@ h3 {
 }
 
 .prog-container {
-  background-color: var(--background-tertiary);
+  background-color: var(--background-primary);
   margin-top: 10px;
   margin-bottom: 10px;
 }
@@ -1159,4 +1162,22 @@ pre {
 th, td {
   border: 1px solid var(--foreground-border);
   padding: 5px;
+}
+
+
+.green-header-bg {
+  background: linear-gradient(rgba(0, 255, 0, 0.2) 0%, rgba(0, 255, 0, 0.05) 100%);
+}
+
+.red-header-bg {
+  background: linear-gradient(rgba(255, 0, 0, 0.2) 0%, rgba(255, 0, 0, 0.05) 100%);
+}
+
+.orange-header-bg {
+  background: linear-gradient(rgba(255, 149, 0, 0.2) 0%, rgba(255, 149, 0, 0.05) 100%);
+}
+
+.card-clickable:hover {
+  border-color: white;
+  cursor: pointer;
 }
