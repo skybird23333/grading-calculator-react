@@ -2,6 +2,10 @@
 
 A gradings calculator that can calculate progression towards a set goal.
 
+![image](https://user-images.githubusercontent.com/58811224/222162039-2bbbdeb8-6351-456c-93bc-2b910a2c34d2.png)
+![image](https://user-images.githubusercontent.com/58811224/222162070-074f77c5-22b9-4ce0-b56d-5f415dcaa19f.png)
+
+
 This is a work in progress
 
 Features:
