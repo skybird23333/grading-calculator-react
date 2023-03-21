@@ -26,11 +26,37 @@ export function SubjectComponent({ subject, id }) {
     const info = calculateInformation(subject.assessments, subject.goal)
 
     const color = (() => {
+        if (isNaN(info.currentGrade)) return "none"
         if (info.currentGrade >= 80) return "green";
         if (info.currentGrade === 0) return "none";
         return info.currentGrade >= 50 ? "yellow" : "red";
     })();
 
+    let minimumScore = (
+        <div>
+            Score a minimum of <b>{Math.ceil(info.minimumGrade)}%</b> to stay above your goal.
+        </div>
+    );
+
+    if (info.minimumGrade >= 100) {
+        minimumScore = (
+            <div className="warn">
+                You won't able to reach {subject.goal}%.
+            </div>
+        );
+    }
+
+    if (info.minimumGrade <= 0) {
+        minimumScore = (
+            <div className="success">
+                You have aced the goal of {subject.goal}%.
+            </div>
+        );
+    }
+
+    if (isNaN(info.currentGrade)) {
+        minimumScore = (<></>)
+    }
 
     return (
         <div className={`card color-${color} card-clickable`} style={{
@@ -42,15 +68,20 @@ export function SubjectComponent({ subject, id }) {
         >
             <div className="card-header">
                 <FaBook /> {subject.name}
+                {" "}
+                <span style={{ color: `var(--${color})`, filter: 'brightness(150%)' }}>
+                    {info.currentGrade}% {" "}
+                </span>
+                <span style={{ fontWeight: 'normal' }}>
+                    <span style={{ color: 'var(--foreground-secondary)' }}>
+                        Avg {info.markAverage}% {" "}
+                    </span>
+                    <span style={{ color: 'rgb(150, 213, 255)' }}>
+                        Goal {subject.goal}%
+                    </span>
+                </span>
             </div>
 
-            Cur {info.currentGrade}% {" "}
-            <span style={{ color: 'var(--foreground-secondary)' }}>
-                Avg {info.markAverage}% {" "}
-            </span>
-            <span style={{ color: 'rgb(150, 213, 255)' }}>
-                Goal {subject.goal}%
-            </span>
 
             <div className="prog-container">
                 <div
@@ -95,7 +126,9 @@ export function SubjectComponent({ subject, id }) {
                 </div>
             </div>
 
+
             <div className="card-footer">
+                {minimumScore}
                 {info.completedAssessmentCount}/{info.totalAssessmentCount} <FaCalendar /> | {info.currentGradeTotal}%/{info.currentWeightTotal}% <FaWeightHanging />
             </div>
         </div>
