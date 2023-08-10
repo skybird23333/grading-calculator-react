@@ -34,12 +34,12 @@ export class Subject extends React.Component {
     super(props);
     this.state = {}
     this.state.editing = false;
-    if(this.props.router.params.subjectId) {
+    if (this.props.router.params.subjectId) {
       this.state.info = getSubject(this.props.router.params.subjectId)
     } else {
       this.state.info = subjectInformation
     }
-    
+
     this.calculateInformation();
     this.handleEdit = this.handleEdit.bind(this);
     this.handleEditSave = this.handleEditSave.bind(this);
@@ -86,7 +86,7 @@ export class Subject extends React.Component {
 
   handleEditSave() {
     this.setState({ editing: false });
-    if(this.props.router.params.subjectId) {
+    if (this.props.router.params.subjectId) {
       updateSubject(this.props.router.params.subjectId, this.state.info)
     }
     this.calculateInformation()
@@ -98,7 +98,7 @@ export class Subject extends React.Component {
       newAssessmentArray[change.key],
       change
     )
-    
+
     this.updateInfoState({ assessments: newAssessmentArray });
   }
 
@@ -276,23 +276,21 @@ export class Subject extends React.Component {
       <div>
         <div style={{ display: "block" }}>
           <h2>
-          <Input
-            style={{ fontSize: "x-large", fontWeight: "bold" }}
-            value={this.state.info.name}
-            onChange={this.handleNameUpdate}
+            <Input
+              style={{ fontSize: "x-large", fontWeight: "bold" }}
+              value={this.state.info.name}
+              onChange={this.handleNameUpdate}
             />
+            Goal: <Input
+              style={{ width: 30 }}
+              value={this.state.info.goal}
+              onChange={this.handleGoalUpdate}
+              type="number"
+            /> %
             <Button style={{ float: "right", background: "green" }} onClick={this.handleEditSave}>
               Save
             </Button>
           </h2>
-        </div>
-        <div style={{ display: "block" }}>
-          Goal: <Input
-            style={{ width: 30 }}
-            value={this.state.info.goal}
-            onChange={this.handleGoalUpdate}
-            type="number"
-            /> %
         </div>
         Your current grade is {Math.roundTwoDigits(this.currentGrade)}% (
         {Math.roundTwoDigits(this.currentGradeTotal)}% scored out of {" "}
@@ -304,7 +302,7 @@ export class Subject extends React.Component {
         TIP: Use tab and shift + tab to cycle through inputs!
       </div>
     );
-    
+
     let editButton = (
       <div>
         <Button style={{ width: "100%" }} onClick={this.handleAddAssessment}>
@@ -329,10 +327,11 @@ export class Subject extends React.Component {
 
     return (
       <div>
-
-        <div className={`${this.color}-header-bg content-header`}>
-          {scoreInformation}
-          {editInformation}
+        <div style={{ position: "sticky", top: 0, background: 'var(--background-secondary)' }}>
+          <div className={`${this.color}-header-bg content-header`}>
+            {scoreInformation}
+            {editInformation}
+          </div>
         </div>
 
 
