@@ -4,6 +4,7 @@ import { Assessment } from "../components/Assessment";
 import { Input } from "../components/Input";
 import { FaBook } from "react-icons/fa";
 import { getSubject, updateSubject } from "../utils/storagehelper";
+import {calculateInformation} from "../utils/calculateInformation";
 
 var subjectInformation = {
   name: "Example Subject",
@@ -66,6 +67,18 @@ export class Subject extends React.Component {
       this.currentGradeTotal += (a.grading * a.weighting) / 100;
       this.completedAssessmentCount += 1;
     });
+
+    //this is poopy code iknow
+    this.state.info.assessments.map((a, i) => {
+      if(i>0 && a.grading) {
+        a.changeToTotalMark =
+            calculateInformation(this.state.info.assessments.slice(0, i + 1), 0).currentGrade //Only pick ones up to the current one
+            -
+            calculateInformation(this.state.info.assessments.slice(0, i), 0).currentGrade //Only pick ones up to the current one(excl current one)
+      }
+      console.log(a)
+      return a
+    })
 
     this.unallocatedWeight = 100 - this.weightTotal; //weighting unallocated for, if negative means overall weighting is over 100%
     this.currentGrade =

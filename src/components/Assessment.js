@@ -1,5 +1,5 @@
 import React from "react";
-import { FaCalendar, FaWeightHanging } from "react-icons/fa";
+import {FaArrowDown, FaArrowUp, FaCalendar, FaWeightHanging} from "react-icons/fa";
 import { Button } from "./Button";
 import { Input } from "./Input";
 import { Label } from "./Label";
@@ -73,6 +73,12 @@ export class Assessment extends React.Component {
       return this.props.g.grading >= 50 ? "orange" : "red";
     })();
 
+    const changeElement = (this.props.g.changeToTotalMark && this.props.g.grading) ? <span
+        style={{color: this.props.g.changeToTotalMark >= 0 ? "lightgreen" : "red"}}
+        title="This indicates how much this assessment has affected your total mark."
+    >
+      { this.props.g.changeToTotalMark >= 0 ? FaArrowUp() : FaArrowDown()} {this.props.g.changeToTotalMark.toFixed(2)}%
+    </span> : <></>
 
     switch (this.props.mode) {
       case "edit":
@@ -133,6 +139,7 @@ export class Assessment extends React.Component {
                     disabled={this.props.g.due}
                   />
                   %
+                  {changeElement}
                 </div>
               </div>
             </div>
@@ -173,6 +180,9 @@ export class Assessment extends React.Component {
               <Label>
                 <FaWeightHanging /> {actualWeighting}
                 {this.props.g.weighting}%
+              </Label>
+              <Label>
+                  {changeElement}
               </Label>
             </span>
           </div>
