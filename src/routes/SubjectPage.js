@@ -3,13 +3,10 @@ import {Button} from "../components/Button";
 import {Assessment} from "../components/Assessment";
 import {Input} from "../components/Input";
 import {
-    FaAngleDoubleDown,
-    FaAngleDoubleUp, FaAngleDown, FaAngleLeft, FaAngleRight, FaAngleUp,
-    FaArrowDown, FaArrowUp, FaBook, FaCheckCircle, FaDotCircle, FaInfoCircle, FaMinus, FaPlus,
+    FaBook,
 } from "react-icons/fa";
 import {getSubject, updateSubject} from "../utils/storagehelper";
 import {calculateInformation} from "../utils/calculateInformation";
-import {Label} from "../components/Label";
 import gradeOverview from "../components/GradeOverview"
 
 var subjectInformation = {
