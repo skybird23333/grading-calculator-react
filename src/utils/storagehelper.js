@@ -83,6 +83,14 @@ export function getAllSubjects() {
 }
 
 /**
+ *
+ * @param index {[]}
+ */
+export function setSubjectIndex(index) {
+    localStorage.setItem('index', JSON.stringify(index))
+}
+
+/**
  * 
  * @param {Subject} data 
  * @returns string UUID

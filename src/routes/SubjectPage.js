@@ -11,11 +11,13 @@ import gradeOverview from "../components/GradeOverview"
 
 var subjectInformation = {
     name: "Example Subject", goal: 75, assessments: [{
-        name: 'Example Assessment 1', due: false, grading: 86, weighting: 50,
+        name: 'Example Assessment 1', due: false, grading: 75, weighting: 50,
     }, {
-        name: 'Example Assessment 2', due: false, grading: 68, weighting: 20,
+        name: 'Example Assessment 2', due: false, grading: 57, weighting: 20,
     }, {
-        name: 'Example Assessment 3', due: true, weighting: 30,
+        name: 'Example Assessment 3', due: false, grading: 83, weighting: 15,
+    }, {
+        name: 'Example Assessment 4', due: true, weighting: 15,
     }],
 };
 
@@ -124,6 +126,25 @@ export class Subject extends React.Component {
         this.updateInfoState({name: e.target.value})
     }
 
+    handleDragStart(e, index) {
+        this.state.draggedIndex = index
+    };
+
+    handleDragOver(e, index) {
+        e.preventDefault();
+        console.log(this.state.draggedIndex, index)
+        if (this.state.draggedIndex !== index) {
+            const newItems = [...this.state.info.assessments];
+            const draggedItem = newItems[this.state.draggedIndex];
+            // Remove the item from the original position
+            newItems.splice(this.state.draggedIndex, 1);
+            // Insert the item at the new position
+            newItems.splice(index, 0, draggedItem);
+            this.state.draggedIndex = index
+            this.updateInfoState({assessments: newItems})
+        }
+    };
+
     render() {
         this.calculateInformation();
 
@@ -134,14 +155,22 @@ export class Subject extends React.Component {
         })();
 
         const assessments = this.state.info.assessments.map((m, i) => {
-            return (<Assessment
-                key={i}
+            return (
+                <div
+                    key={i}
+                    draggable={this.state.editing}
+                    onDragStart={(e) => this.handleDragStart(e, i)}
+                    onDragOver={(e) => this.handleDragOver(e, i)}
+                >
+            <Assessment
                 keyy={i}
                 g={m}
                 mode={this.state.editing ? "edit" : null}
                 onAssessmentChange={this.handleAssessmentChange}
                 onAssessmentDelete={this.handleDeleteAssessment}
-            />);
+            />
+                </div>
+        );
         });
 
         const underAllocationWarning = (this.unallocatedWeight > 0) ? (<div className="error">
@@ -303,6 +332,7 @@ export class Subject extends React.Component {
             {minimumScore}
             {underAllocationWarning}
             {overAllocationWarning}
+            Drag and drop to reorder assessments.
             TIP: Use tab and shift + tab to cycle through inputs!
         </div>);
 
