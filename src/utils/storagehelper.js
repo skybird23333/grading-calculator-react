@@ -32,28 +32,16 @@ function initLocalStorage() {
     if(!index) {
         localStorage.setItem('index', '["b4611ce8-90f4-4b67-a3a4-beb8eda4233d"]')
         localStorage.setItem('b4611ce8-90f4-4b67-a3a4-beb8eda4233d', JSON.stringify({
-            name: "Example Subject",
-            goal: 75,
-            assessments: [
-              {
-                name: 'Example Assessment 1',
-                due: false,
-                grading: 86,
-                weighting: 50,
-              },
-              {
-                name: 'Example Assessment 2',
-                due: false,
-                grading: 68,
-                weighting: 20,
-              },
-              {
-                name: 'Example Assessment 3',
-                due: true,
-                weighting: 30,
-              }
-            ],
-          }))
+            name: "Example Subject", goal: 75, assessments: [{
+                name: 'Example Assessment 1', due: false, grading: 75, weighting: 50,
+            }, {
+                name: 'Example Assessment 2', due: false, grading: 57, weighting: 20,
+            }, {
+                name: 'Example Assessment 3', due: false, grading: 83, weighting: 15,
+            }, {
+                name: 'Example Assessment 4', due: true, weighting: 15,
+            }],
+        }))
     }
 }
 

@@ -9,6 +9,7 @@ import { Subject } from "./routes/SubjectPage";
 import { IndexRoute } from "./routes/Index";
 import { ComponentTest } from "./routes/ComponentTest";
 import withRouter from "./utils/withRouterProp";
+import NotFound from "./routes/NotFound"
 
 //TODO: Export to a separate util file instead of attaching onto math
 Math.roundTwoDigits = function (num) {
@@ -38,6 +39,7 @@ root.render(
           <Route path="subject" element={<Subject />} />
           <Route path="subjects/:subjectId" element={<SubjectWithRouter />} />
           <Route path="test" element={<ComponentTest />} />
+          <Route path="notfound" element={withRouter(NotFound)} />
         </Routes>
       </div>
     </HashRouter>

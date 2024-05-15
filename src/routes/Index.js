@@ -4,13 +4,8 @@ import { SubjectComponent } from '../components/SubjectComponent'
 import {createSubject, getAllSubjects, setSubjectIndex} from "../utils/storagehelper";
 
 export function IndexRoute() {
-  const [subjects, setSubjects] = useState([]);
+  const [subjects, setSubjects] = useState(getAllSubjects());
   const [draggedIndex, setDraggedIndex] = useState(-1)
-
-  // Load subjects on component mount
-  useEffect(() => {
-    setSubjects(getAllSubjects() || []);
-  }, []);
 
   const handleAddSubject = () => {
     const newSubject = {
@@ -19,8 +14,8 @@ export function IndexRoute() {
       assessments: []
     };
 
-    createSubject(newSubject);
-    setSubjects([...subjects, newSubject]); // Update subjects after adding
+    const id = createSubject(newSubject);
+    setSubjects([...subjects, [newSubject, id]]); // Update subjects after adding
   };
 
   const handleDragStart = (e, index) => {
@@ -54,7 +49,7 @@ export function IndexRoute() {
         <div className="content-content">
           {subjects.map((subject, index) => (
               <div
-                  key={subject} // Use unique key for each draggable item
+                  key={index} // Use unique key for each draggable item
                   draggable
                   onDragStart={(e) => handleDragStart(e, index)}
                   onDragOver={(e) => handleDragOver(e, index)}

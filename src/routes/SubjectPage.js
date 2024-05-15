@@ -27,6 +27,8 @@ export class Subject extends React.Component {
         this.state = {}
         this.state.editing = false;
         if (this.props.router.params.subjectId) {
+            console.log(JSON.stringify(getSubject(this.props.router.params.subjectId)) === "{}")
+
             this.state.info = getSubject(this.props.router.params.subjectId)
         } else {
             this.state.info = subjectInformation

@@ -9,7 +9,7 @@ import calculateColorFromGrade from "../utils/calculateColorFromGrade";
 export function SubjectComponent({subject, id}) {
     const navigate = useNavigate()
 
-    if ((!subject.name && !subject.goal) || subject === {}) {
+    if ((!subject?.name && !subject?.goal) || subject === {}) {
         console.log(`UNABLE TO LOAD SUBJECT ${id}. DATA HAS BEEN LOGGED BELOW.`)
         console.log(subject)
 
