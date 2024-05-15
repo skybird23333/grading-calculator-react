@@ -59,15 +59,6 @@ export class Subject extends React.Component {
             this.completedAssessmentCount += 1;
         });
 
-        //this is poopy code iknow
-        this.state.info.assessments.map((a, i) => {
-            if (i > 0 && a.grading) {
-                a.changeToTotalMark = calculateInformation(this.state.info.assessments.slice(0, i + 1), 0).currentGrade //Only pick ones up to the current one
-                    - calculateInformation(this.state.info.assessments.slice(0, i), 0).currentGrade //Only pick ones up to the current one(excl current one)
-            }
-            return a
-        })
-
         this.unallocatedWeight = 100 - this.weightTotal; //weighting unallocated for, if negative means overall weighting is over 100%
         this.currentGrade = (this.currentGradeTotal / this.currentWeightTotal) * 100; //the current grade, considering only completed assessments.
 
@@ -88,19 +79,34 @@ export class Subject extends React.Component {
             updateSubject(this.props.router.params.subjectId, this.state.info)
         }
         this.calculateInformation()
+        this.updateInfoState({})
     }
 
     handleAssessmentChange(change) {
         const newAssessmentArray = this.state.info.assessments;
         newAssessmentArray[change.key] = Object.assign(newAssessmentArray[change.key], change)
-
         this.updateInfoState({assessments: newAssessmentArray});
+    }
+
+    recalculateChangeToTotalMark(assessments) {
+        return assessments.map((a, i) => {
+            if (i > 0 && a.grading) {
+                a.changeToTotalMark = calculateInformation(assessments.slice(0, i + 1), 0).currentGrade //Only pick ones up to the current one
+                    - calculateInformation(assessments.slice(0, i), 0).currentGrade //Only pick ones up to the current one(excl current one)
+            }
+            return a
+        })
     }
 
     updateInfoState(data) {
         const info = this.state.info
+
+        const newData = Object.assign(info, data)
+        //this is poopy code iknow
+        newData.assessments = this.recalculateChangeToTotalMark(newData.assessments)
+
         this.setState({
-            info: Object.assign(info, data)
+            info: newData
         })
     }
 
@@ -127,7 +133,7 @@ export class Subject extends React.Component {
     }
 
     handleDragStart(e, index) {
-        this.state.draggedIndex = index
+        this.setState({draggedIndex: index})
     };
 
     handleDragOver(e, index) {
@@ -140,10 +146,23 @@ export class Subject extends React.Component {
             newItems.splice(this.state.draggedIndex, 1);
             // Insert the item at the new position
             newItems.splice(index, 0, draggedItem);
-            this.state.draggedIndex = index
+            this.setState({draggedIndex: index})
             this.updateInfoState({assessments: newItems})
         }
     };
+
+    componentDidMount() {
+        //this is poopy code iknow
+        this.updateInfoState({
+            assessments: this.state.info.assessments.map((a, i) => {
+                if (i > 0 && a.grading) {
+                    a.changeToTotalMark = calculateInformation(this.state.info.assessments.slice(0, i + 1), 0).currentGrade //Only pick ones up to the current one
+                        - calculateInformation(this.state.info.assessments.slice(0, i), 0).currentGrade //Only pick ones up to the current one(excl current one)
+                }
+                return a
+            })
+        })
+    }
 
     render() {
         this.calculateInformation();
@@ -162,15 +181,15 @@ export class Subject extends React.Component {
                     onDragStart={(e) => this.handleDragStart(e, i)}
                     onDragOver={(e) => this.handleDragOver(e, i)}
                 >
-            <Assessment
-                keyy={i}
-                g={m}
-                mode={this.state.editing ? "edit" : null}
-                onAssessmentChange={this.handleAssessmentChange}
-                onAssessmentDelete={this.handleDeleteAssessment}
-            />
+                    <Assessment
+                        keyy={i}
+                        g={m}
+                        mode={this.state.editing ? "edit" : null}
+                        onAssessmentChange={this.handleAssessmentChange}
+                        onAssessmentDelete={this.handleDeleteAssessment}
+                    />
                 </div>
-        );
+            );
         });
 
         const underAllocationWarning = (this.unallocatedWeight > 0) ? (<div className="error">

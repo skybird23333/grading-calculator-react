@@ -121,6 +121,7 @@ export function getSubject(id) {
  * @param {Subject} data 
  */
 export function updateSubject(id, data) {
+    data.assessments.map(a => delete a.changeToTotalMark) //Strip the display only field when saving
     return localStorage.setItem(id, JSON.stringify(data))
 }
 

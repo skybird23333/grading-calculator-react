@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { v4 as uuid } from "uuid"; // Use `v4` as `uuid`
 import { Button } from "../components/Button";
 import { SubjectComponent } from '../components/SubjectComponent'
 import {createSubject, getAllSubjects, setSubjectIndex} from "../utils/storagehelper";
