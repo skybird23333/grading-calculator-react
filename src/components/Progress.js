@@ -22,7 +22,9 @@ export class Progress extends React.Component {
                         width: `${this.progressPercentage}%`,
                         background: this.props.color || 'var(--foreground-primary)'
                     }}
-                ></div>
+                >
+                    <slot></slot>
+                </div>
             </div>
         )
     }

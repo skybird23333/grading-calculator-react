@@ -73,6 +73,7 @@ export class Assessment extends React.Component {
       return this.props.g.grading >= 50 ? "orange" : "red";
     })();
 
+
     const changeElement = (this.props.g.changeToTotalMark && this.props.g.grading) ? <span
         style={{color: this.props.g.changeToTotalMark >= 0 ? "lightgreen" : "red"}}
         title="This indicates how much this assessment has affected your total mark."
@@ -154,7 +155,19 @@ export class Assessment extends React.Component {
           : `${this.props.g.grading}%`;
 
         const progressbar = this.props.g.due ? null : (
-          <Progress max={100} val={this.props.g.grading} color={this.color}></Progress>
+            <Progress max={100} val={this.props.g.grading} color={this.color}>
+              <div
+                  className="prog-content"
+                  style={{
+                    position: "absolute",
+                    width: 3 + "px",
+                    height: '25px',
+                    bottom: '-5px',
+                    background: "rgba(255, 255, 0, 0.5)",
+                    left: 25 + "%"
+                  }}
+              ></div>
+            </Progress>
         );
 
         if (this.props.g.due) {
@@ -162,19 +175,19 @@ export class Assessment extends React.Component {
         }
 
         return (
-          <div
-            className="card background"
-            style={{ borderLeft: `5px solid ${this.color}` }}
-          >
             <div
-              style={{ background: "grey", width: "95%", height: "100%" }}
-            ></div>
+                className="card background"
+                style={{borderLeft: `5px solid ${this.color}`}}
+            >
+              <div
+                  style={{background: "grey", width: "95%", height: "100%"}}
+              ></div>
 
-            <h3><FaCalendar />{this.props.g.name} </h3>
+              <h3><FaCalendar/>{this.props.g.name} </h3>
 
-            {progressbar}
+              {progressbar}
 
-            <div style={{ float: "right", fontSize: "x-large" }}>{marks}</div>
+              <div style={{ float: "right", fontSize: "x-large" }}>{marks}</div>
 
             <span style={{ textAlign: "center" }}>
               <Label>

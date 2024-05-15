@@ -20,13 +20,18 @@ export function calculateInformation(assessments, goal) {
 
     const unallocatedWeight = 100 - weightTotal; //weighting unallocated for, if negative means overall weighting is over 100%
     const currentGrade =
-        ((currentGradeTotal / currentWeightTotal) * 100).toFixed(2); //the current grade, considering only completed assessments.
+        ((currentGradeTotal / currentWeightTotal) * 100)     //the current grade, considering only completed assessments.
 
     const minimumGrade =
         (((goal / 100) * (weightTotal - unallocatedWeight) -
                 currentGradeTotal) /
             (weightTotal - currentWeightTotal)) *
         100;
+
+    const maximumGrade = ((currentGradeTotal +
+                (weightTotal - currentWeightTotal)) /
+            weightTotal) *
+        100
 
     return {
         currentGradeTotal,
@@ -37,6 +42,7 @@ export function calculateInformation(assessments, goal) {
         unallocatedWeight,
         currentGrade,
         minimumGrade,
-        markAverage
+        markAverage,
+        maximumGrade
     }
 }

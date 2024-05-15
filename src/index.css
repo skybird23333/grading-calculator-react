@@ -435,6 +435,7 @@ blockquote p {
   margin: 2px;
   padding: 4px;
   border-radius: 4px;
+  border: 1px solid var(--foreground-border);
 }
 
 .prog-container {
@@ -1180,4 +1181,9 @@ th, td {
 .card-clickable:hover {
   border-color: white;
   cursor: pointer;
+}
+
+.secondary-label {
+  color: var(--foreground-primary);
+  font-size: smaller;
 }
