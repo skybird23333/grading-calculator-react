@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Button } from "../components/Button";
 import { SubjectComponent } from '../components/SubjectComponent'
 import {createSubject, getAllSubjects, setSubjectIndex} from "../utils/storagehelper";
