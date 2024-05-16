@@ -1,5 +1,7 @@
 # Grading calculator react
 
+## Access it [here](https://skybird23333.github.io/grading-calculator-react/#/)
+
 Save and track your mark progression across different assessments. I made this to learn React and for my own usage.
 
 ![image](https://github.com/skybird23333/grading-calculator-react/assets/58811224/11466e6d-d1bf-40b2-abd1-40977cb13acf)
