@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Button } from "../components/Button";
 import { SubjectComponent } from '../components/SubjectComponent'
 import {createSubject, getAllSubjects, setSubjectIndex} from "../utils/storagehelper";
+import {Link} from "react-router-dom";
+import {FaCloud} from "react-icons/fa";
 
 export function IndexRoute() {
   const [subjects, setSubjects] = useState(getAllSubjects());
@@ -45,6 +47,14 @@ export function IndexRoute() {
       <div>
         <div className="content-header">
           <h2>All Subjects</h2>
+        </div>
+        <div className={"card"} style={{
+          background: "linear-gradient(to right, var(--background-primary) 25%, var(--background-tertiary) 100%)",
+        }}>
+          <h3>[NEW] Save your data to the cloud thing<FaCloud></FaCloud>®️™️ beta</h3>
+          Are you sick of this thing only storing on one device?
+          I kind of am by now, so now you can sync it across devices! <br></br>
+          <Link to={"/login"} className={"link"}>> Manage your data</Link>
         </div>
         <div className="content-content">
           {subjects.map((subject, index) => (

@@ -1,4 +1,5 @@
 //@ts-check
+import { useState, useEffect } from 'react';
 import { v1 } from 'uuid'
 
 /**
@@ -26,6 +27,25 @@ import { v1 } from 'uuid'
 // ...
 
 initLocalStorage()
+
+let isCloudUpdatePending = false
+export function useCloudUpdatePending() {
+    const [value, setValue] = useState();
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setValue(isCloudUpdatePending);
+        }, 1000); // check the value every second
+
+        return () => clearInterval(interval);
+    }, []);
+
+    return value;
+}
+
+export function setCloudUpdatePending(value) {
+    isCloudUpdatePending = value
+}
 
 function initLocalStorage() {
     const index = localStorage.getItem('index')
@@ -84,6 +104,8 @@ export function setSubjectIndex(index) {
  * @returns string UUID
  */
 export function createSubject(data) {
+    isCloudUpdatePending = true
+
     const index = getAllSubjectIds()
     const id = v1()
 
@@ -91,8 +113,9 @@ export function createSubject(data) {
 
     localStorage.setItem('index', JSON.stringify(index))
     localStorage.setItem(id, JSON.stringify(data))
-    
+
     return id
+
 }
 
 /**
@@ -109,11 +132,14 @@ export function getSubject(id) {
  * @param {Subject} data 
  */
 export function updateSubject(id, data) {
+    isCloudUpdatePending = true
+    console.log('Subject updated')
     data.assessments.map(a => delete a.changeToTotalMark) //Strip the display only field when saving
     return localStorage.setItem(id, JSON.stringify(data))
 }
 
 export function removeSubject(id) {
+    isCloudUpdatePending = true
     const index = getAllSubjectIds()
     localStorage.setItem('index', JSON.stringify(index.filter(i => i !== id)))
     return localStorage.removeItem(id)
@@ -124,6 +150,7 @@ export function exportSubjectData() {
 }
 
 export function importSubjectData(data) {
+    localStorage.setItem("index", "[]")
     data.forEach(subject => {
         createSubject(subject)
     })
