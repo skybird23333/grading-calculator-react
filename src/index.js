@@ -68,7 +68,7 @@ const App = () => {
                         <span>Logged in</span>
                   </>
               ) :
-                  <span>Not logged in</span>}
+                  <span></span>}
             </div>
           </div>
           <div className="content">

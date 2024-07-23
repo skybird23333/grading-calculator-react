@@ -10,6 +10,7 @@ export default function Login(supabase) {
     const [session, setSession] = useState(null)
     const [user, setUser] = useState(null)
     const [cloudData, setCloudData] = useState(null)
+    const [cloudLastUpdated, setCloudLastUpdated] = useState(null)
 
     useEffect(() => {
         supabase.auth.getSession().then(({data: {session}}) => {
@@ -24,9 +25,9 @@ export default function Login(supabase) {
                 setUser(user.user)
             })
 
-            const {data, error} = supabase
+            supabase
                 .from('userData')
-                .select('userdata')
+                .select('*')
                 .single().then(({data, error}) => {
                     if (error) {
                         console.error(error)
@@ -35,6 +36,7 @@ export default function Login(supabase) {
 
                     if (data) {
                         setCloudData(JSON.parse(data.userdata))
+                        setCloudLastUpdated(data.lastUpdated)
                     }
 
                 })
@@ -50,8 +52,9 @@ export default function Login(supabase) {
     const handleSaveDataToCloud = async () => {
         await supabase
             .from('userData')
-            .upsert({userdata: exportSubjectData(), email: user.email})
+            .upsert({userdata: exportSubjectData(), email: user.email, lastUpdated: new Date().toISOString()})
         alert("Done")
+        setCloudLastUpdated(new Date().toISOString())
     }
 
     const handleImportDataFromCloud = async () => {
@@ -103,9 +106,16 @@ export default function Login(supabase) {
 
                 <h2>How to sync your data</h2>
                 You are now logged in. Use below buttons to upload them to the cloud.
-                Be careful not to lose your data, and confirm you are doing what you want.<br></br>
-                <Button onClick={() => {handleSaveDataToCloud()}}>Upload data to cloud</Button>
-                <Button onClick={() => {handleImportDataFromCloud()}}>Download data from cloud</Button>
+                Be careful not to lose your data, and confirm you are doing what you want. {" "}
+                <b>Existing data will be overwritten.</b><br></br>
+                <div className={"card"} style={{
+                    background: 'repeating-linear-gradient(45deg, #000, #000 5px, var(--red) 5px, var(--red) 10px)'
+                }}>
+                    <b>Danger Zone</b><br></br>
+                    <Button onClick={() => {handleSaveDataToCloud()}}>Upload data to cloud</Button>
+                    <Button onClick={() => {handleImportDataFromCloud()}}>Download data from cloud</Button>
+                </div>
+                {cloudLastUpdated && <div>Last updated at {new Date(cloudLastUpdated).toLocaleString()}</div>}
 
                 <h2>Current Data in the Cloud</h2>
                 You have {cloudData?.length} subjects in the cloud. <br></br>
@@ -115,7 +125,7 @@ export default function Login(supabase) {
 
                 <h2>I want to delete my account!</h2>
                 I can't be bothered to implement account deletion. Please send an email to 2603003199a@gmail.com from
-                the email you are logged in as({user?.email}) and let me know.
+                the email you are logged in as() and let me know.
             </div>
             {legal}
         </div>
