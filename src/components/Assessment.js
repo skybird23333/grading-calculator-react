@@ -56,10 +56,10 @@ export class Assessment extends React.Component {
     return parseFloat(n)
   }
   handleStatusChange(i) {
-    console.log(i)
+    console.log(i.target.checked)
     this.props.onAssessmentChange({
       // eslint-disable-next-line
-      due: (i == 1),
+      due: (!i.target.checked),
       //i hate eslint
       key: this.state.key
     });
@@ -94,6 +94,8 @@ export class Assessment extends React.Component {
                 style={{ fontSize: "large", fontWeight: "bold" }}
                 onChange={this.handleNameChange}
               />
+
+              {changeElement}
               <div style={{ float: "right" }}>
                 <Button
                   onClick={() => { this.props.onAssessmentDelete(this.props.keyy) }}
@@ -114,25 +116,18 @@ export class Assessment extends React.Component {
                   />
                   %
                 </div>
-                <div style={{ display: "block" }}>
-                  Status:
-                  <Select
-                    options={[
-                      { name: 'Due', value: 1 },
-                      { name: 'Complete', value: 0 }
-                    ]}
-
-                    onChange={this.handleStatusChange}
-
-                    value={this.props.g.due ? 1 : 0}
-                  >
-                  </Select>
+                <div style={{display: "block"}}>
+                  <label>
+                    Completed
+                    <input type={"checkbox"} checked={!this.props.g.due} onChange={this.handleStatusChange}></input>
+                    <span className="checkbox"></span>
+                  </label>
                 </div>
                 <div>
                   Grading:
                   <Input
-                    value={this.props.g.grading}
-                    style={{ width: 60 }}
+                      value={this.props.g.grading}
+                      style={{ width: 60 }}
                     onChange={this.handleGradingChange}
                     min="1"
                     max="100"
@@ -140,18 +135,17 @@ export class Assessment extends React.Component {
                     disabled={this.props.g.due}
                   />
                   %
-                  {changeElement}
                 </div>
               </div>
             </div>
           </div>
         );
       default:
-        let actualWeighting = `${Math.roundTwoDigits(this.props.g.grading * this.props.g.weighting) / 100
+        let actualWeighting = `${((this.props.g.grading * this.props.g.weighting) / 100).toFixed(2)
           }%/`;
 
         const marks = this.props.g.due
-          ? "Due assessment"
+          ? "Due"
           : `${this.props.g.grading}%`;
 
         const progressbar = this.props.g.due ? null : (

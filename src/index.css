@@ -41,8 +41,8 @@ main {
   margin: 15px;
   background: rgba(26, 26, 26, 0.5);
 
-  -webkit-backdrop-filter: blur(16px);
-  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
   z-index: 10;
   width: calc(100% - 30px);
   border: 2px solid var(--foreground-border);
@@ -306,7 +306,7 @@ h3 {
   color: var(--foreground-primary);
   display: block;
   padding: 6px;
-  margin: none;
+  margin: 0;
   text-decoration: none;
   transition: filter .4s;
 }
@@ -334,7 +334,7 @@ h3 {
     position: relative;
     z-index: 1;
     margin: auto;
-    padding: none;
+    padding: 0;
     background: var(--background-primary);
     overflow-x: hidden;
     padding-top: 80px;
@@ -751,4 +751,57 @@ html, body, #root {
     grid-template-columns: auto;
     grid-template-rows: auto auto auto;
   }
+}
+
+/* Hide the default checkbox */
+input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Create a custom checkbox */
+.checkbox {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  background-color: var(--background-tertiary);
+  border: 2px solid var(--foreground-border);
+  border-radius: 4px;
+}
+
+/* Create the checkmark/indicator (hidden by default) */
+.checkbox::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  width: 8px;
+  height: 14px;
+  border: solid var(--background-primary);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  opacity: 0;
+}
+
+/* Show the checkmark when the checkbox is checked */
+input[type="checkbox"]:checked ~ .checkbox {
+  background-color: var(--foreground-primary);
+  border-color: var(--foreground-border);
+}
+
+input[type="checkbox"]:checked ~ .checkbox::after {
+  opacity: 1;
+}
+
+/* Optional: Add some text beside the checkbox */
+label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 16px;
+  user-select: none;
+}
+
+label span {
+  margin-left: 8px;
 }

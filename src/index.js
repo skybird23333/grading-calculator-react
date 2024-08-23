@@ -115,9 +115,7 @@ const App = () => {
                     <Link to="/">
                       Grading calculator
                     </Link>
-                </span>
-                    <div className={"button selected"} style={{margin: 0, padding: "5 5"}}>Assessments</div>
-                    <div className={"button"} style={{margin: 0, padding: "5 5"}} disabled>Calendar</div>
+                </span>,
                     <span style={{float: "right"}}>
                         Made with 💻 by <a className={"link"} href={"https://github.com/skybird23333"}>me</a>
                     </span>

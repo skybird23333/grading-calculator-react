@@ -51,16 +51,6 @@ export function IndexRoute() {
             <div className="content-header">
                 <h2>All Subjects</h2>
             </div>
-            <div className={"content-content"} style={{
-                background: "linear-gradient(to right, rgba(70, 70, 70, 0.5) 5%, var(--background-primary) 100%)",
-                border: "var(--foreground-border) 1px solid",
-                marginBottom: "10px"
-            }}>
-                <h3>[NEW] Save your data to the cloud thing<FaCloud></FaCloud>®️™️ beta</h3>
-                Are you sick of this thing only storing on one device?
-                I kind of am by now, so now you can sync it across devices! <br></br>
-                <Link to={"/login"} className={"link"}>> Manage your data</Link>
-            </div>
             <div className="content-content">
                 {subjects.map((subject, index) => (
                     <div

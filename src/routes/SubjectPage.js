@@ -6,58 +6,33 @@ import { FaBook } from "react-icons/fa";
 import { getSubject, updateSubject } from "../utils/storagehelper";
 import { calculateInformation } from "../utils/calculateInformation";
 import gradeOverview from "../components/GradeOverview";
-import {useParams,} from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const subjectInformation = {
-    name: "Example Subject",
+    name: "NULL Subject",
     goal: 75,
     assessments: [
-        { name: 'Example Assessment 1', due: false, grading: 75, weighting: 50 },
-        { name: 'Example Assessment 2', due: false, grading: 57, weighting: 20 },
-        { name: 'Example Assessment 3', due: false, grading: 83, weighting: 15 },
+        { name: 'IF YOU SEE THIS SUBJECT', due: false, grading: 75, weighting: 50 },
+        { name: 'THERE IS A BUG WITH THIS THING', due: false, grading: 57, weighting: 20 },
+        { name: 'YOUR DATA IS SAFE(PROBABLY)', due: false, grading: 83, weighting: 15 },
         { name: 'Example Assessment 4', due: true, weighting: 15 },
     ],
 };
 
-export function Subject () {
+export function Subject() {
     const [info, setInfo] = useState(subjectInformation);
     const [editing, setEditing] = useState(false);
     const [draggedIndex, setDraggedIndex] = useState(-1);
     const { subjectId } = useParams();
 
     useEffect(() => {
-        console.log('sus')
         if (subjectId) {
             const subject = getSubject(subjectId);
             if (JSON.stringify(subject) !== "{}") {
-                setInfo(subject);
+                updateInfoState(subject);
             }
         }
     }, [subjectId]);
-
-    const calculateInformation = () => {
-        let currentGradeTotal = 0;
-        let currentWeightTotal = 0;
-        let weightTotal = 0;
-        let completedAssessmentCount = 0;
-        let totalAssessmentCount = 0;
-
-        info.assessments.forEach((a) => {
-            weightTotal += a.weighting;
-            totalAssessmentCount += 1;
-            if (a.due) return;
-            currentWeightTotal += a.weighting;
-            currentGradeTotal += (a.grading * a.weighting) / 100;
-            completedAssessmentCount += 1;
-        });
-
-        const unallocatedWeight = 100 - weightTotal;
-        const currentGrade = (currentGradeTotal / currentWeightTotal) * 100;
-        const minimumGrade = (((info.goal / 100) * (weightTotal - unallocatedWeight) - currentGradeTotal) / (weightTotal - currentWeightTotal)) * 100;
-        const maximumGrade = ((currentGradeTotal + (weightTotal - currentWeightTotal)) / weightTotal) * 100;
-
-        return { currentGradeTotal, currentWeightTotal, weightTotal, completedAssessmentCount, totalAssessmentCount, unallocatedWeight, currentGrade, minimumGrade, maximumGrade };
-    };
 
     const handleEdit = () => setEditing(true);
 
@@ -117,14 +92,14 @@ export function Subject () {
     const recalculateChangeToTotalMark = (assessments) => {
         return assessments.map((a, i) => {
             if (i > 0 && a.grading) {
-                a.changeToTotalMark = calculateInformation(assessments.slice(0, i + 1), 0).currentGrade
-                    - calculateInformation(assessments.slice(0, i), 0).currentGrade;
+                a.changeToTotalMark = calculateInformation(assessments.slice(0, i + 1)).currentGrade
+                    - calculateInformation(assessments.slice(0, i)).currentGrade;
             }
             return a;
         });
     };
 
-    const { currentGrade, currentGradeTotal, weightTotal, currentWeightTotal, completedAssessmentCount, totalAssessmentCount, unallocatedWeight, minimumGrade, maximumGrade } = calculateInformation();
+    const { currentGrade, currentGradeTotal, weightTotal, currentWeightTotal, completedAssessmentCount, totalAssessmentCount, unallocatedWeight, minimumGrade, maximumGrade } = calculateInformation(info.assessments, info.goal);
 
     const color = (() => {
         if (currentGrade >= 80) return "green";
@@ -198,8 +173,6 @@ export function Subject () {
             {gradeOverview({ currentGrade, currentGradeTotal, goal: info.goal, maximumGrade, recentChange, totalChange }, true)}
             {scoreProgressBar}
             {minimumScore}
-            {underAllocationWarning}
-            {overAllocationWarning}
             <h3>{completedAssessmentCount}/{totalAssessmentCount} Assessments Completed</h3>
         </div>
     );
@@ -216,8 +189,6 @@ export function Subject () {
             {gradeOverview({ currentGrade, currentGradeTotal, goal: info.goal, maximumGrade, recentChange, totalChange }, true)}
             {scoreProgressBar}
             {minimumScore}
-            {underAllocationWarning}
-            {overAllocationWarning}
             Drag and drop to reorder assessments. TIP: Use tab and shift + tab to cycle through inputs!
         </div>
     );
@@ -245,7 +216,7 @@ export function Subject () {
 
     return (
         <div>
-            <div style={{ top: 0, background: 'var(--background-secondary)' }}>
+            <div style={{  background: 'var(--background-secondary)' }}>
                 <div className={`${color}-header-bg content-header`}>
                     {scoreInformation}
                     {editInformation}

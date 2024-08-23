@@ -100,7 +100,7 @@ export function SubjectComponentCompact({subject, id}) {
                             height: '15px',
                             bottom: '-5px',
                             background: "rgba(255, 0, 0, 0.5)",
-                            left: info.currentGrade.toFixed() + "%"
+                            left: info.currentGrade / (info.currentWeightTotal) * 10 + "%"
                         }}
                     ></div>
                     <div
