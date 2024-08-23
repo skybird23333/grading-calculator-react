@@ -96,6 +96,7 @@ export function getAllSubjects() {
  */
 export function setSubjectIndex(index) {
     localStorage.setItem('index', JSON.stringify(index))
+    window.dispatchEvent(new Event('storage'))
 }
 
 /**
@@ -114,8 +115,9 @@ export function createSubject(data) {
     localStorage.setItem('index', JSON.stringify(index))
     localStorage.setItem(id, JSON.stringify(data))
 
-    return id
+    window.dispatchEvent(new Event('storage'))
 
+    return id
 }
 
 /**
@@ -135,6 +137,7 @@ export function updateSubject(id, data) {
     isCloudUpdatePending = true
     console.log('Subject updated')
     data.assessments.map(a => delete a.changeToTotalMark) //Strip the display only field when saving
+    window.dispatchEvent(new Event('storage'))
     return localStorage.setItem(id, JSON.stringify(data))
 }
 
@@ -142,6 +145,7 @@ export function removeSubject(id) {
     isCloudUpdatePending = true
     const index = getAllSubjectIds()
     localStorage.setItem('index', JSON.stringify(index.filter(i => i !== id)))
+    window.dispatchEvent(new Event('storage'))
     return localStorage.removeItem(id)
 }
 
@@ -154,4 +158,9 @@ export function importSubjectData(data) {
     data.forEach(subject => {
         createSubject(subject)
     })
+    window.dispatchEvent(new Event('storage'))
+}
+
+export function onStorageChanged(callback) {
+    window.addEventListener('storage', callback)
 }

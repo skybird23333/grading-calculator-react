@@ -122,10 +122,6 @@ export default function Login(supabase) {
                 {cloudData?.map((subject, index) => {
                     return <div key={index}>{subject.name} - {subject.assessments?.length} assessments</div>
                 }) }
-
-                <h2>I want to delete my account!</h2>
-                I can't be bothered to implement account deletion. Please send an email to 2603003199a@gmail.com from
-                the email you are logged in as() and let me know.
             </div>
             {legal}
         </div>
