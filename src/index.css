@@ -681,3 +681,74 @@ html, body, #root {
     display: inherit;
   }
 }
+
+.button-container {
+  display: inline-flex;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.l-box {
+  padding: 1em;
+}
+
+.form {
+  display: grid;
+  margin: 12px;
+}
+
+.label {
+  background-color: var(--background-tertiary);
+  margin: 2px;
+  padding: 4px;
+  border-radius: 4px;
+  border: 1px solid var(--foreground-border);
+}
+
+.prog-container {
+  background-color: var(--background-primary);
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.prog-content {
+  background-color: var(--foreground-primary);
+  height: 5px;
+}
+
+.prog-content-large {
+  background-color: var(--foreground-primary);
+  height: 15px;
+}
+
+.prog-container, .prog-content-large {
+  transition: all 0.4s;
+}
+
+.select {
+  margin: 5px;
+  padding: 7px;
+  background-color: var(--background-tertiary);
+  color: var(--foreground-primary);
+  border-radius: 4px;
+  border: 1px solid var(--foreground-border);
+}
+
+.select option {
+  padding: 7px;
+  background-color: var(--background-secondary);
+  color: var(--foreground-primary);
+  border-radius: 4px;
+}
+
+.assessment-input-grid {
+  display: grid;
+  grid-template-columns: auto auto auto;
+}
+
+@media only screen and (max-width: 500px) {
+  .assessment-input-grid {
+    grid-template-columns: auto;
+    grid-template-rows: auto auto auto;
+  }
+}
