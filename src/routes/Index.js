@@ -3,7 +3,7 @@ import {Button} from "../components/Button";
 import {SubjectComponent} from '../components/SubjectComponent'
 import {createSubject, getAllSubjects, onStorageChanged, setSubjectIndex} from "../utils/storagehelper";
 import {Link} from "react-router-dom";
-import {FaBook, FaCloud} from "react-icons/fa";
+import {FaBook, FaCloud, FaStar} from "react-icons/fa";
 
 export function IndexRoute() {
     const [subjects, setSubjects] = useState(getAllSubjects());
@@ -72,6 +72,9 @@ export function IndexRoute() {
                         </a>
                     )
                 }
+                <div>
+                    <b>Like it? <a href={"https://github.com/skybird23333/grading-calculator-react"} target="_blank" rel="noreferrer"><FaStar/>Star it!</a></b> - This will mean a lot to me!
+                </div>
             </div>
             <div className="content-content">
                 {subjects.map((subject, index) => (
