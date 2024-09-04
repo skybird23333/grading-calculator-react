@@ -10,6 +10,7 @@ import {
 } from "react-icons/fa";
 import React from "react";
 import calculateColorFromGrade from "../utils/calculateColorFromGrade";
+import MarkDisplay from "./MarkDisplay";
 
 /**
  *
@@ -34,28 +35,28 @@ export default function GradeOverview({currentGrade, currentGradeTotal, goal, ma
             <Label>
 <span title={`You are currently at ${currentGrade.toFixed(2)}`}
                 style={{color: "var(--" + calculateColorFromGrade(currentGrade) + ")", filter: 'brightness(150%)' }}>
-    <FaCheckCircle/> <b>{currentGrade.toFixed(2)}%</b>
+    <FaCheckCircle/> {MarkDisplay(currentGrade)}
         </span>
             </Label>
 
             <Label>
           <span title={`You will currently achieve a minimum of ${currentGradeTotal.toFixed(2)}`}
                 style={{color: "rgb(255, 100, 100)"}}>
-        <FaAngleLeft/> {currentGradeTotal.toFixed(2)}%
+        <FaAngleLeft/> {MarkDisplay(currentGradeTotal)}
         </span>
             </Label>
 
             <Label>
           <span title={`You are aiming for ${goal.toFixed(2)}`}
                 style={{color: "rgba(0, 153, 255, 1)"}}>
-          <FaDotCircle/> {goal.toFixed(2)}%
+          <FaDotCircle/> {MarkDisplay(goal)}
         </span>
             </Label>
 
             <Label>
           <span title={`You will currently achieve a maximum of ${maximumGrade.toFixed(2)}`}
                 style={{color: "yellow"}}>
-          <FaAngleRight/> {maximumGrade.toFixed(2)}%
+          <FaAngleRight/> {MarkDisplay(maximumGrade)}
         </span>
             </Label>
 

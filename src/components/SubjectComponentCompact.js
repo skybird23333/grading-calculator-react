@@ -5,6 +5,7 @@ import {Button} from "./Button";
 import {calculateInformation} from "../utils/calculateInformation";
 import gradeOverview from "./GradeOverview";
 import calculateColorFromGrade from "../utils/calculateColorFromGrade";
+import MarkDisplay from "./MarkDisplay";
 
 // this is a copy paste of SubjectComponent with a few features removed.
 export function SubjectComponentCompact({subject, id, isActive, onClick}) {
@@ -33,14 +34,14 @@ export function SubjectComponentCompact({subject, id, isActive, onClick}) {
 
     let minimumScore = (
         <span>
-            🎯 {Math.ceil(info.minimumGrade)}%
+            🎯 {MarkDisplay(subject.goal, false)}
         </span>
     );
 
     if (info.minimumGrade >= 100) {
         minimumScore = (
             <span>
-                ❌{info.maximumGrade.toFixed(2)}%.
+                ❌{MarkDisplay(info.maximumGrade, false)}
             </span>
         );
     }
@@ -48,7 +49,7 @@ export function SubjectComponentCompact({subject, id, isActive, onClick}) {
     if (info.minimumGrade <= 0) {
         minimumScore = (
             <span>
-                🥳 {info.currentGradeTotal.toFixed(2)}%.
+                🥳 {MarkDisplay(info.currentGradeTotal, false)}%
             </span>
         );
     }
@@ -84,7 +85,7 @@ export function SubjectComponentCompact({subject, id, isActive, onClick}) {
                 <b>{subject.name} <span style={{
                     color: `var(--${color})`,
                     filter: 'brightness(200%)'
-                }}>{info.currentGrade.toFixed(1)}%</span></b> {minimumScore}
+                }}>{MarkDisplay(info.currentGrade)}</span></b> {minimumScore}
             </span>
 
         </div>

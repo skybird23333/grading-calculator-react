@@ -39,7 +39,7 @@ const App = () => {
     const [collapsed, setCollapsed] = useState(true);
 
     useEffect(() => {
-        //trigger the animation on start
+        if (window.innerWidth < 1300) return
         setCollapsed(false)
     }, [])
 

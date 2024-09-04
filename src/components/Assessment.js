@@ -5,8 +5,23 @@ import { Input } from "./Input";
 import { Label } from "./Label";
 import { Progress } from "./Progress";
 import { Select } from "./SingleSelect";
+import MarkDisplay from "./MarkDisplay";
 
 export class Assessment extends React.Component {
+  /**
+   * @param props {Object}
+   * @param props.g {Object}
+   * @param props.g.name {String}
+   * @param props.g.weighting {Number}
+   * @param props.g.grading {Number}
+   * @param props.g.due {Boolean}
+   * @param props.g.changeToTotalMark {Number}
+   * @param props.g.gradePossibilities {[Number, Number]}
+   * @param props.keyy {Number}
+   * @param props.mode {String}
+   * @param props.onAssessmentChange {Function}
+   * @param props.onAssessmentDelete {Function}
+   */
   constructor(props) {
     super(props);
 
@@ -73,25 +88,40 @@ export class Assessment extends React.Component {
       return this.props.g.grading >= 50 ? "orange" : "red";
     })();
 
+    console.log(this.props.g.gradePossibilities)
 
-    const changeElement = (this.props.g.changeToTotalMark && this.props.g.grading) ? <span
-        style={{color: this.props.g.changeToTotalMark >= 0 ? "lightgreen" : "red"}}
-        title="This indicates how much this assessment has affected your total mark."
-    >
-      { this.props.g.changeToTotalMark >= 0 ? FaArrowUp() : FaArrowDown()} {this.props.g.changeToTotalMark.toFixed(2)}%
-    </span> : <></>
 
+    const changeElement =
+        (this.props.g.changeToTotalMark && this.props.g.grading) ?
+            <span
+                style={{color: this.props.g.changeToTotalMark >= 0 ? "lightgreen" : "red"}}
+                title="This indicates how much this assessment has affected your total mark."
+            >
+              { this.props.g.changeToTotalMark >= 0 ? FaArrowUp() : FaArrowDown()} {MarkDisplay(this.props.g.changeToTotalMark)}
+            </span> :
+                this.props.g.gradePossibilities ?
+                    <>
+                      50%: <span
+                        style={{color: "indianred"}}
+                        title="How your mark will be affected if you get 50%."
+                    ><b>{MarkDisplay(this.props.g.gradePossibilities[0])}</b></span> {" "}100%:
+                      <span
+                          style={{color: "forestgreen"}}
+                          title="How your mark will be affected if you get 100%."
+                      ><b>{MarkDisplay(this.props.g.gradePossibilities[1])}</b></span>
+                    </>
+                    : null;
     switch (this.props.mode) {
       case "edit":
         return (
-          <div
-            className="card background"
-            style={{ borderLeft: `5px solid grey` }}
-          >
-            <div style={{ display: "block" }}>
-              <Input
-                value={this.props.g.name}
-                style={{ fontSize: "large", fontWeight: "bold" }}
+            <div
+                className="card background"
+                style={{borderLeft: `5px solid grey`}}
+            >
+              <div style={{display: "block"}}>
+                <Input
+                    value={this.props.g.name}
+                    style={{fontSize: "large", fontWeight: "bold" }}
                 onChange={this.handleNameChange}
               />
 
@@ -144,10 +174,6 @@ export class Assessment extends React.Component {
         let actualWeighting = `${((this.props.g.grading * this.props.g.weighting) / 100).toFixed(2)
           }%/`;
 
-        const marks = this.props.g.due
-          ? "Due"
-          : `${this.props.g.grading}%`;
-
         const progressbar = this.props.g.due ? null : (
             <Progress max={100} val={this.props.g.grading} color={this.color}>
               <div
@@ -171,7 +197,7 @@ export class Assessment extends React.Component {
         return (
             <div
                 className="card background"
-                style={{borderLeft: `5px solid ${this.color}`}}
+                style={{borderLeft: `5px solid ${this.color}`, margin: '10px 0px 0px 0px'}}
             >
               <div
                   style={{background: "grey", width: "95%", height: "100%"}}
@@ -181,7 +207,10 @@ export class Assessment extends React.Component {
 
               {progressbar}
 
-              <div style={{ float: "right", fontSize: "x-large" }}>{marks}</div>
+              <div style={{ float: "right", fontSize: "x-large" }}>
+                {this.props.g.due
+                  ? "Due"
+                  : MarkDisplay(this.props.g.grading)}</div>
 
             <span style={{ textAlign: "center" }}>
               <Label>
@@ -192,8 +221,8 @@ export class Assessment extends React.Component {
                   {changeElement}
               </Label>
             </span>
-          </div>
-        );
-    }
-  }
-}
+            </div>
+      );
+      }
+      }
+      }

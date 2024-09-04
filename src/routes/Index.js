@@ -1,9 +1,9 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Button} from "../components/Button";
 import {SubjectComponent} from '../components/SubjectComponent'
 import {createSubject, getAllSubjects, onStorageChanged, setSubjectIndex} from "../utils/storagehelper";
 import {Link} from "react-router-dom";
-import {FaCloud} from "react-icons/fa";
+import {FaBook, FaCloud} from "react-icons/fa";
 
 export function IndexRoute() {
     const [subjects, setSubjects] = useState(getAllSubjects());
@@ -46,10 +46,32 @@ export function IndexRoute() {
         setSubjectIndex(subjects.map(s => s[1]))
     }
 
+    //fetch github for latest release notes
+    const [latestRelease, setLatestRelease] = useState(null)
+    useEffect(() => {
+        fetch("https://api.github.com/repos/skybird23333/grading-calculator-react/releases/latest")
+            .then(response => response.json())
+            .then(data => {
+                setLatestRelease(data)
+                console.log(latestRelease)
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            })
+    }, [])
+
     return (
         <div>
             <div className="content-header">
-                <h2>All Subjects</h2>
+                <h2>Home</h2>
+                {
+                    latestRelease && (
+                        <a href={latestRelease?.html_url} target="_blank" rel="noreferrer" className={"link"}
+                        >
+                            <FaBook/> Latest release notes - <b>{latestRelease?.name}</b> - {new Date(latestRelease?.published_at).toLocaleDateString()}
+                        </a>
+                    )
+                }
             </div>
             <div className="content-content">
                 {subjects.map((subject, index) => (

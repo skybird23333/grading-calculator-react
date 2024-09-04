@@ -90,13 +90,21 @@ export function Subject() {
     };
 
     const recalculateChangeToTotalMark = (assessments) => {
-        return assessments.map((a, i) => {
-            if (i > 0 && a.grading) {
-                a.changeToTotalMark = calculateInformation(assessments.slice(0, i + 1)).currentGrade
-                    - calculateInformation(assessments.slice(0, i)).currentGrade;
+        const newAssessments = assessments.map((a, i) => {
+            if (i > 0) {
+                const currentGrade = calculateInformation(assessments.slice(0, i)).currentGrade;
+                if (!a.due) { // If marks exist
+                    a.changeToTotalMark = calculateInformation(assessments.slice(0, i + 1)).currentGrade - currentGrade;
+                } else { // Marks don't exist, calculate possibility
+                    a.gradePossibilities = [
+                        calculateInformation(assessments.slice(0, i).concat({ ...a, grading: 50, due: false })).currentGrade - currentGrade,
+                        calculateInformation(assessments.slice(0, i).concat({ ...a, grading: 100, due: false })).currentGrade - currentGrade,
+                    ];
+                }
             }
             return a;
         });
+        return newAssessments;
     };
 
     const { currentGrade, currentGradeTotal, weightTotal, currentWeightTotal, completedAssessmentCount, totalAssessmentCount, unallocatedWeight, minimumGrade, maximumGrade } = calculateInformation(info.assessments, info.goal);
