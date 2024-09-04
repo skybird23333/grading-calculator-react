@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/grading-calculator-react/static/css/main.64ee6bd1.css",
-    "main.js": "/grading-calculator-react/static/js/main.7794e9d9.js",
+    "main.css": "/grading-calculator-react/static/css/main.d324349e.css",
+    "main.js": "/grading-calculator-react/static/js/main.faadb6e8.js",
     "static/js/289.fc5f0304.chunk.js": "/grading-calculator-react/static/js/289.fc5f0304.chunk.js",
     "index.html": "/grading-calculator-react/index.html",
-    "main.64ee6bd1.css.map": "/grading-calculator-react/static/css/main.64ee6bd1.css.map",
-    "main.7794e9d9.js.map": "/grading-calculator-react/static/js/main.7794e9d9.js.map",
+    "main.d324349e.css.map": "/grading-calculator-react/static/css/main.d324349e.css.map",
+    "main.faadb6e8.js.map": "/grading-calculator-react/static/js/main.faadb6e8.js.map",
     "289.fc5f0304.chunk.js.map": "/grading-calculator-react/static/js/289.fc5f0304.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.64ee6bd1.css",
-    "static/js/main.7794e9d9.js"
+    "static/css/main.d324349e.css",
+    "static/js/main.faadb6e8.js"
   ]
 }
