@@ -7,7 +7,7 @@ import gradeOverview from "./GradeOverview";
 import calculateColorFromGrade from "../utils/calculateColorFromGrade";
 
 // this is a copy paste of SubjectComponent with a few features removed.
-export function SubjectComponentCompact({subject, id}) {
+export function SubjectComponentCompact({subject, id, isActive, onClick}) {
     const navigate = useNavigate()
 
     if ((!subject?.name && !subject?.goal) || subject === {}) {
@@ -40,7 +40,7 @@ export function SubjectComponentCompact({subject, id}) {
     if (info.minimumGrade >= 100) {
         minimumScore = (
             <span>
-                ❌{subject.goal}%.
+                ❌{info.maximumGrade.toFixed(2)}%.
             </span>
         );
     }
@@ -48,7 +48,7 @@ export function SubjectComponentCompact({subject, id}) {
     if (info.minimumGrade <= 0) {
         minimumScore = (
             <span>
-                🥳 {subject.goal}%.
+                🥳 {info.currentGradeTotal.toFixed(2)}%.
             </span>
         );
     }
@@ -72,70 +72,21 @@ export function SubjectComponentCompact({subject, id}) {
     return (
         <div className={`card color-${color} card-clickable`} style={{
             borderLeftWidth: '10px',
-            background: 'var(--background-tertiary)',
+            background: `linear-gradient(to right, var(--foreground-border) ${info.currentGrade}%, rgba(26,26,26,0.5) ${info.currentGrade}%)`,
             margin: 0
         }}
              onClick={() => {
                  navigate(`/subjects/${id}`)
+                    onClick()
              }}
         >
             <span>
-                <b>{subject.name} <span style={{color: `var(--${color})`, filter: 'brightness(200%)'}}>{info.currentGrade.toFixed(1)}%</span></b> {minimumScore}
+                <b>{subject.name} <span style={{
+                    color: `var(--${color})`,
+                    filter: 'brightness(200%)'
+                }}>{info.currentGrade.toFixed(1)}%</span></b> {minimumScore}
             </span>
 
-            <div className="prog-container">
-                <div
-                    className="prog-content"
-                    style={{
-                        width: "100%",
-                        background: "var(--foreground-border)",
-                        position: 'relative'
-                    }}
-                > {/* Already done assessments */}
-                    <div
-                        className="prog-content"
-                        style={{
-                            position: "absolute",
-                            width: 3 + "px",
-                            height: '15px',
-                            bottom: '-5px',
-                            background: "rgba(255, 0, 0, 0.5)",
-                            left: info.currentGrade / (info.currentWeightTotal) * 10 + "%"
-                        }}
-                    ></div>
-                    <div
-                        className="prog-content"
-                        style={{
-                            position: "absolute",
-                            width: 3 + "px",
-                            height: '15px',
-                            bottom: '-5px',
-                            background: "rgba(0, 153, 255, 0.5)",
-                            left: subject.goal + "%"
-                        }}
-                    ></div>
-                    <div
-                        className="prog-content"
-                        style={{
-                            position: "absolute",
-                            width: 3 + "px",
-                            height: '15px',
-                            bottom: '-5px',
-                            background: "rgba(255, 255, 0, 0.5)",
-                            left: info.maximumGrade.toFixed() + "%"
-                        }}
-                    ></div>
-
-                    <div
-                        className="prog-content"
-                        style={{width: info.currentGrade + "%"}}
-                    >
-                        {/*Grading*/}
-                    </div>
-
-                </div>
-                {/*Weighting for assessments done*/}
-            </div>
         </div>
     )
 }

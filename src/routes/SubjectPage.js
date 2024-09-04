@@ -142,7 +142,7 @@ export function Subject() {
     if (minimumGrade <= 0) {
         minimumScore = (
             <div className="success">
-                <p>The goal of {info.goal}% can be achieved even if remaining assessments are skipped.</p>
+                <p>The goal of {info.goal}% can be achieved even if remaining assessments are skipped, giving you {currentGradeTotal.toFixed(2)}%.</p>
             </div>
         );
     }

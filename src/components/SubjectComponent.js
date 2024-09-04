@@ -31,24 +31,24 @@ export function SubjectComponent({subject, id}) {
     const color = calculateColorFromGrade(info.currentGrade)
 
     let minimumScore = (
-        <div>
+        <span>
             Score a minimum of <b>{Math.ceil(info.minimumGrade)}%</b> to stay above your goal.
-        </div>
+        </span>
     );
 
     if (info.minimumGrade >= 100) {
         minimumScore = (
-            <div className="warn">
+            <span className="warn">
                 You won't able to reach {subject.goal}%.
-            </div>
+            </span>
         );
     }
 
     if (info.minimumGrade <= 0) {
         minimumScore = (
-            <div className="success">
+            <span className="success">
                 You have aced the goal of {subject.goal}%.
-            </div>
+            </span>
         );
     }
 
@@ -156,12 +156,10 @@ export function SubjectComponent({subject, id}) {
                 </div>
                 {/*Weighting for assessments done*/}
             </div>
-
-
             <div className="card-footer">
-                {minimumScore}
+                {minimumScore} {" "}
                 {info.completedAssessmentCount}/{info.totalAssessmentCount}
-                <FaCalendar/> | {info.currentGradeTotal}%/{info.currentWeightTotal}% <FaWeightHanging/>
+                {" "} Done | {info.currentGradeTotal}%/{info.currentWeightTotal}% <FaWeightHanging/>
             </div>
         </div>
     )
