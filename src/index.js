@@ -19,9 +19,10 @@ import {
     createSubject, getAllSubjects, onStorageChanged, setSubjectIndex, useCloudUpdatePending
 } from "./utils/storagehelper";
 import {SubjectComponent} from "./components/SubjectComponent";
-import {FaCalendar, FaCloud, FaHome, FaBars, FaCross, FaCheck, FaXing, FaLongArrowAltLeft} from "react-icons/fa";
+import {FaCalendar, FaCloud, FaHome, FaBars, FaCross, FaCheck, FaXing, FaLongArrowAltLeft, FaCog} from "react-icons/fa";
 import {SubjectComponentCompact} from "./components/SubjectComponentCompact";
 import {Calendar} from "./routes/Calendar";
+import Settings from "./routes/Settings";
 
 const supabase = createClient("https://zgvdgrpwnfpdiwuhgqhk.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpndmRncnB3bmZwZGl3dWhncWhrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjE2MjY2NTQsImV4cCI6MjAzNzIwMjY1NH0.0OSGVCEpDUS8jDp2foTh9xC_VVkDTak69QhWWZnzErw");
 
@@ -142,6 +143,9 @@ const App = () => {
                     <Link to={"/"} style={{margin: 0, padding: 0}} onClick={handlePageChange}>
                         <Button style={{width: "100%", marginBottom: "10px"}}> <FaHome/> Home</Button>
                     </Link>
+                    <Link to={"/settings"} style={{margin: 0, padding: 0}} onClick={handlePageChange}>
+                        <Button style={{width: "100%", marginBottom: "10px"}}> <FaCog/> Settings</Button>
+                    </Link>
                     <Link to={"/login"} style={{margin: 0, padding: 0}} onClick={handlePageChange}>
                         <Button style={{width: "100%", marginBottom: "10px"}}> <FaCloud/> Cloud {" "}
                             <span style={{color: "var(--foreground-secondary)"}}>
@@ -174,6 +178,7 @@ const App = () => {
                         <Route path="/" element={<IndexRoute subjects={subjects}/>}/>
                         <Route path="calendar" element={<Calendar/>}/>
                         <Route path="subjects/:subjectId" element={<Subject/>}/>
+                        <Route path="settings" element={<Settings/>}/>
                         <Route path="test" element={<ComponentTest/>}/>
                         <Route path="notfound" element={withRouter(NotFound)}/>
                         <Route path="login" element={Login(supabase)}/>

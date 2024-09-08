@@ -7,6 +7,7 @@ import { getSubject, updateSubject } from "../utils/storagehelper";
 import { calculateInformation } from "../utils/calculateInformation";
 import gradeOverview from "../components/GradeOverview";
 import { useParams } from "react-router-dom";
+import {getSetting} from "../utils/settingsManager";
 
 const subjectInformation = {
     name: "NULL Subject",
@@ -96,10 +97,20 @@ export function Subject() {
                 if (!a.due) { // If marks exist
                     a.changeToTotalMark = calculateInformation(assessments.slice(0, i + 1)).currentGrade - currentGrade;
                 } else { // Marks don't exist, calculate possibility
+
+                    const markPossibilityUpper = getSetting("interface.possibilityhighscoreusehighest") ? Math.max(...assessments.slice(0, i).map(a => a.grading))
+                            : parseFloat(getSetting("interface.possibilityhighscore"));
+                    const markPossibiliyLower = getSetting("interface.possibilitylowscoreuselowest") ?
+                        Math.min(...assessments.slice(0, i).map(a => a.grading)) :
+                        parseFloat(getSetting("interface.possibilitylowscore"));
+
+                    console.log(markPossibiliyLower, markPossibilityUpper);
+
                     a.gradePossibilities = [
-                        calculateInformation(assessments.slice(0, i).concat({ ...a, grading: 50, due: false })).currentGrade - currentGrade,
-                        calculateInformation(assessments.slice(0, i).concat({ ...a, grading: 100, due: false })).currentGrade - currentGrade,
+                        calculateInformation(assessments.slice(0, i).concat({ ...a, grading: markPossibiliyLower, due: false })).currentGrade - currentGrade,
+                        calculateInformation(assessments.slice(0, i).concat({ ...a, grading: markPossibilityUpper, due: false })).currentGrade - currentGrade,
                     ];
+                    a.gradePossibilitiesScores = [markPossibiliyLower, markPossibilityUpper]
                 }
             }
             return a;
@@ -110,9 +121,9 @@ export function Subject() {
     const { currentGrade, currentGradeTotal, weightTotal, currentWeightTotal, completedAssessmentCount, totalAssessmentCount, unallocatedWeight, minimumGrade, maximumGrade } = calculateInformation(info.assessments, info.goal);
 
     const color = (() => {
-        if (currentGrade >= 80) return "green";
+        if (currentGrade >= getSetting("interface.greenmark")) return "green";
         if (currentGrade === 0) return "none";
-        return currentGrade >= 50 ? "orange" : "red";
+        return currentGrade >= getSetting("interface.orangemark") ? "orange" : "red";
     })();
 
     const assessments = info.assessments.map((m, i) => (

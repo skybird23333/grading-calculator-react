@@ -1,3 +1,5 @@
+import {getSetting} from "../utils/settingsManager";
+
 /**
  * Display a mark
  * @param mark {Number}
@@ -10,7 +12,9 @@ export default function MarkDisplay(mark, showDecimal = true) {
         <span>
             {fixedMark.split('.')[0]}
             {showDecimal &&
-                (<><span style={{fontSize: 'smaller'}}>.{fixedMark.split('.')[1]}</span></>)
+                (<><span style={{fontSize: getSetting('interface.smallerdecimal') ? 'smaller' : ''}}>.{fixedMark.split('.')[1]}
+                    {getSetting('interface.showpercent') ? '%' : ''}
+                </span></>)
             }
         </span>
     );

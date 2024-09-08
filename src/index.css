@@ -11,6 +11,15 @@
   --green: #068606;
 }
 
+/*:root {*/
+/*      --background-primary: rgb(254, 254, 254);*/
+/*      --background-secondary: #e2e2e2;*/
+/*      --background-tertiary: #ffffff;*/
+/*      --foreground-primary: rgb(0, 0, 0);*/
+/*      --foreground-secondary: rgb(104, 104, 104);*/
+/*      --foreground-border: rgb(216, 216, 216);*/
+/*  }*/
+
 html {
   min-height: 100%;
   scroll-behavior: smooth;
@@ -824,4 +833,8 @@ label span {
 
 .side-contents.collapsed .Button {
   display: none;
+}
+
+.settings-item:hover {
+  background: var(--background-tertiary)
 }
