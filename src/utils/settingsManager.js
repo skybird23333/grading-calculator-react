@@ -15,7 +15,7 @@ export const settingsList = [
         default: 80
     },
     {
-        name: 'interface.orangemark ',
+        name: 'interface.orangemark',
         desc: <>The amount required for an assessment or subject to show as orange</>,
         type: 'number',
         default: 50
