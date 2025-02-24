@@ -24,7 +24,7 @@ import {SubjectComponentCompact} from "./components/SubjectComponentCompact";
 import {Calendar} from "./routes/Calendar";
 import Settings from "./routes/Settings";
 
-const supabase = createClient("https://zgvdgrpwnfpdiwuhgqhk.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpndmRncnB3bmZwZGl3dWhncWhrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjE2MjY2NTQsImV4cCI6MjAzNzIwMjY1NH0.0OSGVCEpDUS8jDp2foTh9xC_VVkDTak69QhWWZnzErw");
+const supabase = createClient("https://eyivovbhiearpppplrsi.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV5aXZvdmJoaWVhcnBwcHBscnNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAzODM2MTAsImV4cCI6MjA1NTk1OTYxMH0.cKKuHJeovtngIQ5Q-ypJGvEtwpJ_6C0SdVio8PSxA8M");
 
 Math.roundTwoDigits = function (num) {
     return this.round((num + Number.EPSILON) * 100) / 100;
