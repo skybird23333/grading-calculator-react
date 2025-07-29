@@ -90,9 +90,16 @@ class CloudSyncManager {
 
     setupStorageListener() {
         window.addEventListener('storage', () => {
+            console.log('Storage event detected');
             this.updateLocalTimestamp();
             if (this.isInitialized && getSetting('cloud.enableautosync')) {
+                console.log('Triggering scheduled sync...');
                 this.scheduleSync();
+            } else {
+                console.log('Sync not triggered:', {
+                    isInitialized: this.isInitialized,
+                    autoSyncEnabled: getSetting('cloud.enableautosync')
+                });
             }
         });
     }

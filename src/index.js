@@ -114,7 +114,14 @@ const App = () => {
 
       // Initialize cloud sync if auto-sync is enabled
       if (session && getSetting("cloud.enableautosync") && cloudSyncManager) {
+        console.log('Auto-sync enabled, initializing cloud sync manager...');
         cloudSyncManager.initialize();
+      } else {
+        console.log('Auto-sync conditions not met:', {
+          hasSession: !!session,
+          autoSyncEnabled: getSetting("cloud.enableautosync"),
+          hasCloudSyncManager: !!cloudSyncManager
+        });
       }
     });
 
@@ -254,17 +261,9 @@ const App = () => {
             onClick={handlePageChange}
           >
             <Button style={{ width: "100%", marginBottom: "10px" }}>
-              {" "}
-              <FaCloud /> Cloud{" "}
-              <span style={{ color: "var(--foreground-secondary)" }}>
-                {session ? (
-                  <>
-                    <span>Logged in</span>
-                  </>
-                ) : (
-                  <span>Not logged in</span>
-                )}
-              </span>
+              <CloudSyncIndicator
+                status={syncStatus}
+              />
             </Button>
           </Link>
           {subjects.map((subject, index) => (
@@ -308,7 +307,7 @@ const App = () => {
             <Route path="/" element={<IndexRoute subjects={subjects} />} />
             <Route path="calendar" element={<Calendar />} />
             <Route path="subjects/:subjectId" element={<Subject />} />
-            <Route path="settings" element={<Settings />} />
+            <Route path="settings" element={<Settings cloudSyncManager={cloudSyncManager}/>} />
             <Route path="test" element={<ComponentTest />} />
             <Route path="notfound" element={withRouter(NotFound)} />
             <Route path="login" element={<Login supabase={supabase} cloudSyncManager={cloudSyncManager} />} />

@@ -358,14 +358,16 @@ export class Assessment extends React.Component {
                   </div>
                   <div>
                     {this.props.g.subtasks ? (
-                      <>
-                        <h3>{this.props.g.grading}%</h3> out of{" "}
+                      <div style={{ display: "grid", gridTemplateColumns: "auto auto" }}>
+                        <div><h3>{this.props.g.grading}%</h3>Average</div>
+                        <div><h3>
                         {
                           this.props.g.subtasks.filter((t) => t.completed)
                             .length
                         }
-                        /{this.props.g.subtasks.length} completed tasks
-                      </>
+                        /{this.props.g.subtasks.length}</h3> Tasks</div>
+                        </div>
+                        
                     ) : (
                       <>
                         Grading:
@@ -390,6 +392,7 @@ export class Assessment extends React.Component {
                       background: "var(--background-secondary)",
                     }}
                   >
+                    Subtasks:
                     {this.props.g.subtasks.map((subtask, index) => (
                       <div
                         key={index}
@@ -404,7 +407,7 @@ export class Assessment extends React.Component {
                         className="card subtask"
                       >
                         <label>
-                          Subtask {index + 1} (Weighting:{" "}
+                          #{index + 1} (Weighting:{" "}
                           {(
                             this.props.g.weighting /
                             this.props.g.subtasks.length
@@ -526,6 +529,9 @@ export class Assessment extends React.Component {
               <h3>
                 <FaCalendar />
                 {this.props.g.name}{" "}
+                {this.props.g.subtasks && (
+                   <span style={{ fontSize: "small", color: 'var(--foreground-secondary)' }}>{this.props.g.subtasks.length} tasks</span>
+                )}
               </h3>
               {progressbar}
               <div
@@ -594,7 +600,7 @@ export class Assessment extends React.Component {
                           this.props.g.subtasks.filter((t) => t.completed)
                             .length
                             ? ""
-                            : ` / ${this.props.g.subtasks.length} tasks`}
+                            : ` on avg`}
                         </span>
                       </>
                     ) : this.props.g.due ? (
