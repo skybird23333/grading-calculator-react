@@ -3,8 +3,9 @@ import {ThemeSupa} from "@supabase/auth-ui-shared";
 import React, {useEffect, useState} from "react";
 import {Button} from "../components/Button";
 import {exportSubjectData, importSubjectData} from "../utils/storagehelper";
+import {getSetting} from "../utils/settingsManager";
 
-export default function Login(supabase) {
+export default function Login({ supabase, cloudSyncManager }) {
 
     //Yes its copy pasted from index. No i cant be bothered.
     const [session, setSession] = useState(null)
@@ -89,9 +90,11 @@ export default function Login(supabase) {
     </div>)
 
     if (session) {
+        const autoSyncEnabled = getSetting('cloud.enableautosync');
+        
         return <div>
             <div className={"content-header"}>
-                <h1>Data Management</h1>
+                <h1>Cloud Data Management</h1>
                 Data storage is provided by <a className={"link"} href={"https://supabase.com"}>Supabase</a>,
                 subject to their terms of service and privacy policy.
                 <div style={{color: "var(--foreground-secondary)"}}>Yes, the url says /login. I couldn't be bothered to
@@ -104,18 +107,39 @@ export default function Login(supabase) {
 
                 <Button onClick={handleLogout}>Log out</Button>
 
-                <h2>How to sync your data</h2>
-                You are now logged in. Use below buttons to upload them to the cloud.
-                Be careful not to lose your data, and confirm you are doing what you want. {" "}
-                <b>Existing data will be overwritten.</b><br></br>
-                <div className={"card"} style={{
-                    background: 'repeating-linear-gradient(45deg, #000, #000 5px, var(--red) 5px, var(--red) 10px)'
-                }}>
-                    <b>Danger Zone</b><br></br>
-                    <Button onClick={() => {handleSaveDataToCloud()}}>Upload data to cloud</Button>
-                    <Button onClick={() => {handleImportDataFromCloud()}}>Download data from cloud</Button>
+                <div className="card" style={{ padding: '16px', margin: '16px 0', backgroundColor: autoSyncEnabled ? 'rgba(0, 255, 0, 0.1)' : 'rgba(255, 165, 0, 0.1)' }}>
+                    <p style={{ margin: '0 0 8px 0', color: 'var(--foreground-primary)' }}>
+                        {autoSyncEnabled 
+                            ? '✅ Auto-sync is enabled. You no longer have to bother using the manual upload/download buttons.'
+                            : '⚠️ Auto-sync is disabled. Enable it in Settings to sync automatically.'
+                        }
+                    </p>
+                    {autoSyncEnabled && (
+                        <div style={{ fontSize: '14px', color: 'var(--foreground-secondary)' }}>
+                            <ul style={{ margin: '8px 0', paddingLeft: '20px' }}>
+                                <li>Changes sync automatically when you make them</li>
+                                <li>Smart conflict resolution prevents data loss</li>
+                                <li>I vibe coded this entire feature so I dont know if conflict resolution actually works</li>
+                            </ul>
+                        </div>
+                    )}
+                    {!autoSyncEnabled && (
+                        <p style={{ margin: '0', fontSize: '14px', color: 'var(--foreground-secondary)' }}>
+                            You can still use manual upload/download below, or enable auto-sync in Settings for seamless experience.
+                        </p>
+                    )}
                 </div>
-                {cloudLastUpdated && <div>Last updated at {new Date(cloudLastUpdated).toLocaleString()}</div>}
+
+                <h2>Manual Sync</h2>
+                Read/write data manually. Any existing data will be overwritten.
+                <div className={"card"} style={{
+                    background: 'repeating-linear-gradient(45deg, #000, #000 5px, rgb(144,0,0) 5px, rgb(144,0,0) 10px)'
+                }}>
+                    <b>⚠️ Scary scare zone</b><br></br>
+                    <Button onClick={() => {handleSaveDataToCloud()}}>Force Upload to Cloud</Button>
+                    <Button onClick={() => {handleImportDataFromCloud()}}>Force Download from Cloud</Button>
+                </div>
+                {cloudLastUpdated && <div>Last manual update: {new Date(cloudLastUpdated).toLocaleString()}</div>}
 
                 <h2>Current Data in the Cloud</h2>
                 You have {cloudData?.length} subjects in the cloud. <br></br>

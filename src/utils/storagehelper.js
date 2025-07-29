@@ -1,12 +1,15 @@
 //@ts-check
 import { useState, useEffect } from 'react';
 import { v1 } from 'uuid'
+import { getSetting } from './settingsManager';
 
 /**
  * @typedef Assessment
  * @property {string} name
  * @property {boolean} due
- * @property
+ * @property {number} grading
+ * @property {number} weighting
+ * @property {number?} changeToTotalMark
  */
 
 /**
@@ -29,8 +32,14 @@ import { v1 } from 'uuid'
 initLocalStorage()
 
 let isCloudUpdatePending = false
+let cloudSyncManager = null
+
+export function setCloudSyncManager(manager) {
+    cloudSyncManager = manager;
+}
+
 export function useCloudUpdatePending() {
-    const [value, setValue] = useState();
+    const [value, setValue] = useState(false);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -136,9 +145,16 @@ export function getSubject(id) {
 export function updateSubject(id, data) {
     isCloudUpdatePending = true
     console.log('Subject updated')
-    data.assessments.map(a => delete a.changeToTotalMark) //Strip the display only field when saving
+    // Strip the display only field when saving
+    const cleanData = {
+        ...data,
+        assessments: data.assessments.map(a => {
+            const { changeToTotalMark, ...cleanAssessment } = a;
+            return cleanAssessment;
+        })
+    };
     window.dispatchEvent(new Event('storage'))
-    return localStorage.setItem(id, JSON.stringify(data))
+    return localStorage.setItem(id, JSON.stringify(cleanData))
 }
 
 export function removeSubject(id) {

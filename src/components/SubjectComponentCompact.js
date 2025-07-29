@@ -11,7 +11,7 @@ import MarkDisplay from "./MarkDisplay";
 export function SubjectComponentCompact({subject, id, isActive, onClick}) {
     const navigate = useNavigate()
 
-    if ((!subject?.name && !subject?.goal) || subject === {}) {
+    if ((!subject?.name && !subject?.goal) || Object.keys(subject).length === 0) {
         console.log(`UNABLE TO LOAD SUBJECT ${id}. DATA HAS BEEN LOGGED BELOW.`)
         console.log(subject)
 

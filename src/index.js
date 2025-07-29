@@ -16,13 +16,17 @@ import {Auth} from '@supabase/auth-ui-react';
 import {ThemeSupa} from '@supabase/auth-ui-shared';
 import Login from "./routes/Login";
 import {
-    createSubject, getAllSubjects, onStorageChanged, setSubjectIndex, useCloudUpdatePending
+    createSubject, getAllSubjects, onStorageChanged, setSubjectIndex, useCloudUpdatePending, setCloudSyncManager
 } from "./utils/storagehelper";
 import {SubjectComponent} from "./components/SubjectComponent";
 import {FaCalendar, FaCloud, FaHome, FaBars, FaCross, FaCheck, FaXing, FaLongArrowAltLeft, FaCog} from "react-icons/fa";
 import {SubjectComponentCompact} from "./components/SubjectComponentCompact";
 import {Calendar} from "./routes/Calendar";
 import Settings from "./routes/Settings";
+import CloudSyncManager from "./utils/cloudSyncManager";
+import {CloudSyncIndicator} from "./components/CloudSyncIndicator";
+import {DataConflictModal} from "./components/DataConflictModal";
+import {getSetting} from "./utils/settingsManager";
 
 const supabase = createClient("https://eyivovbhiearpppplrsi.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV5aXZvdmJoaWVhcnBwcHBscnNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAzODM2MTAsImV4cCI6MjA1NTk1OTYxMH0.cKKuHJeovtngIQ5Q-ypJGvEtwpJ_6C0SdVio8PSxA8M");
 
@@ -38,11 +42,33 @@ const App = () => {
     const [session, setSession] = useState(null);
     const [saved, setSaved] = useState(false);
     const [collapsed, setCollapsed] = useState(true);
+    const [cloudSyncManager, setCloudSyncManagerState] = useState(null);
+    const [syncStatus, setSyncStatus] = useState({ status: 'disconnected' });
+    const [conflict, setConflict] = useState(null);
 
     useEffect(() => {
         if (window.innerWidth < 1300) return
         setCollapsed(false)
     }, [])
+
+    // Initialize cloud sync manager
+    useEffect(() => {
+        const manager = new CloudSyncManager(supabase);
+        setCloudSyncManagerState(manager);
+        setCloudSyncManager(manager);
+
+        // Listen for sync status changes
+        manager.onSyncStatusChanged(setSyncStatus);
+        
+        // Listen for conflicts
+        manager.onConflict(setConflict);
+
+        return () => {
+            manager.offSyncStatusChanged(setSyncStatus);
+            manager.offConflict(setConflict);
+            manager.stop();
+        };
+    }, []);
 
     useEffect(() => {
         supabase.auth.getSession().then(({data: {session}}) => {
@@ -51,10 +77,15 @@ const App = () => {
 
         const {data: {subscription}} = supabase.auth.onAuthStateChange((_event, session) => {
             setSession(session);
+            
+            // Initialize cloud sync if auto-sync is enabled
+            if (session && getSetting('cloud.enableautosync') && cloudSyncManager) {
+                cloudSyncManager.initialize();
+            }
         });
 
         return () => subscription.unsubscribe();
-    }, []);
+    }, [cloudSyncManager]);
 
     const isCloudUpdatePending = useCloudUpdatePending();
 
@@ -102,6 +133,16 @@ const App = () => {
         setCollapsed(!collapsed);
     };
 
+    const handleManualSync = async () => {
+        if (cloudSyncManager) {
+            try {
+                await cloudSyncManager.manualSync();
+            } catch (error) {
+                alert('Sync failed: ' + error.message);
+            }
+        }
+    };
+
     //AUto collapse if tapping outside of sidebar
     useEffect(() => {
         const collapse = (evt) => {
@@ -131,9 +172,6 @@ const App = () => {
                                 Grading calculator
                             </Link>
                         </span>
-                        <span style={{float: "right"}}>
-                            Made with 💻 by <a className={"link"} href={"https://github.com/skybird23333"}>me</a>
-                        </span>
                     </div>
                 </div>
                 <div className={`side-contents hide-scrollbar ${collapsed ? 'collapsed' : ''}`}>
@@ -147,12 +185,16 @@ const App = () => {
                         <Button style={{width: "100%", marginBottom: "10px"}}> <FaCog/> Settings</Button>
                     </Link>
                     <Link to={"/login"} style={{margin: 0, padding: 0}} onClick={handlePageChange}>
-                        <Button style={{width: "100%", marginBottom: "10px"}}> <FaCloud/> Cloud {" "}
-                            <span style={{color: "var(--foreground-secondary)"}}>
-                                {session ? (<>
-                                    <span>Logged in</span>
-                                </>) : <span>Not logged in</span>}
-                            </span>
+                    <Button style={{width: "100%", marginBottom: "10px"}}>
+                        <CloudSyncIndicator
+                            status={syncStatus}
+                            lastSync={cloudSyncManager?.lastSyncTime}
+                            enabled={getSetting('cloud.enableautosync')}
+                            onManualSync={handleManualSync}
+                            cloudSyncManager={cloudSyncManager}
+                            session={session}
+                            style="sidebar"
+                        />
                         </Button>
                     </Link>
                     {subjects.map((subject, index) => (<div
@@ -178,12 +220,18 @@ const App = () => {
                         <Route path="/" element={<IndexRoute subjects={subjects}/>}/>
                         <Route path="calendar" element={<Calendar/>}/>
                         <Route path="subjects/:subjectId" element={<Subject/>}/>
-                        <Route path="settings" element={<Settings/>}/>
+                        <Route path="settings" element={<Settings cloudSyncManager={cloudSyncManager}/>}/>
                         <Route path="test" element={<ComponentTest/>}/>
                         <Route path="notfound" element={withRouter(NotFound)}/>
-                        <Route path="login" element={Login(supabase)}/>
+                        <Route path="login" element={<Login supabase={supabase} cloudSyncManager={cloudSyncManager} />}/>
                     </Routes>
                 </div>
+                {conflict && (
+                    <DataConflictModal
+                        conflict={conflict}
+                        onClose={() => setConflict(null)}
+                    />
+                )}
             </HashRouter>
         </div>);
 };

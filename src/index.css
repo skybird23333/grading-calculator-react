@@ -1,15 +1,18 @@
 :root {
-  --background-primary: #111111;
-  --background-secondary: #1a1a1a;
-  --background-tertiary: #222222;
-  --foreground-primary: rgb(221, 221, 221);
-  --foreground-secondary: rgb(165, 165, 165);
-  --foreground-border: rgb(56, 56, 56);
-  --blue: #18488f;
-  --red: #8a1010;
-  --yellow: #a56023;
-  --green: #068606;
+  --background-primary: #121212;
+  --background-secondary: #181818;
+  --background-tertiary: #1f1f1f;
+
+  --foreground-primary: #e4e4e7;    /* Softer white */
+  --foreground-secondary: #a1a1aa;  /* Neutral gray */
+  --foreground-border: #2a2a2a;     /* Less contrasty border */
+
+  --blue: #3b82f6;    /* Soft modern blue */
+  --red: #ef4444;     /* Elegant red */
+  --yellow: #eab308;  /* Goldish yellow */
+  --green: #22c55e;   /* Soft minty green */
 }
+
 
 /*:root {*/
 /*      --background-primary: rgb(254, 254, 254);*/
@@ -35,7 +38,6 @@ body {
   position: relative;
   z-index: -1001;
 
-  background-repeat: no-repeat;
   background-position-y: bottom;
   background-size: 100% auto;
   flex: 1;
@@ -279,7 +281,7 @@ h3 {
 }
 
 .prog-content {
-  background-color: var(--foreground-primary);
+  background-color: linear-gradient(to right, #3a5f7d, var(--foreground-primary));
   height: 5px;
 }
 
@@ -592,43 +594,48 @@ pre {
 }
 
 
-/* QUOTE AND INFORMATION */
 .quote,
 .alert p,
 .info p,
 .warn p,
 .success p,
 .error p {
-  background: var(--background-primary);
-  padding: 0.5em 10px;
+  background: var(--background-tertiary);
+  padding: 0.75em 1em;
   border: 1px solid;
-  border-left: 5px solid;
-  border-radius: 4px;
+  border-left: 4px solid;
+  border-radius: 6px;
+  color: var(--foreground-primary);
+  /* box-shadow: inset 0 0 0 1px var(--foreground-border); */
+  box-shadow: inset 0 0 4px rgba(255, 255, 255, 0.02);
 }
 
+/* Specific callout styles */
+
 .quote {
-  border: none;
-  border-left: 5px solid;
+  border-left-color: var(--foreground-border);
+  font-style: italic;
+  color: var(--foreground-secondary);
 }
 
 .info p {
-  background-color: var(--blue);
-  border-color: #0077ff;
+  background: rgba(59, 130, 246, 0.3); /* Blue translucent */
+  border-color: #3b82f6;
 }
 
 .warn p {
-  background-color: var(--yellow);
-  border-color: #efbf00;
+  background: rgba(234, 179, 8, 0.3);
+  border-color: #eab308;
 }
 
 .error p {
-  background-color: var(--red);
-  border-color: #bc0000;
+  background: rgba(239, 68, 68, 0.3);
+  border-color: #ef4444;
 }
 
 .success p {
-  background-color: var(--green);
-  border-color: #00e600;
+  background: rgba(34, 197, 94, 0.3);
+  border-color: #22c55e;
 }
 
 /* TABLE */
@@ -646,16 +653,29 @@ th, td {
 
 
 .green-header-bg {
-  background: linear-gradient(rgba(0, 255, 0, 0.2) 0%, rgba(0, 255, 0, 0.05) 100%);
+  background: linear-gradient(
+    to bottom,
+    rgba(34, 197, 94, 0.15),
+    rgba(34, 197, 94, 0.03)
+  );
 }
 
 .red-header-bg {
-  background: linear-gradient(rgba(255, 0, 0, 0.2) 0%, rgba(255, 0, 0, 0.05) 100%);
+  background: linear-gradient(
+    to bottom,
+    rgba(239, 68, 68, 0.15),
+    rgba(239, 68, 68, 0.03)
+  );
 }
 
 .orange-header-bg {
-  background: linear-gradient(rgba(255, 149, 0, 0.2) 0%, rgba(255, 149, 0, 0.05) 100%);
+  background: linear-gradient(
+    to bottom,
+    rgba(234, 179, 8, 0.15),
+    rgba(234, 179, 8, 0.03)
+  );
 }
+
 
 .card-clickable:hover {
   border-color: white;

@@ -44,6 +44,36 @@ export const settingsList = [
         type: 'boolean',
         default: false
     },
+    {
+        name: 'cloud.enableautosync',
+        desc: <>Enable automatic cloud sync (requires login)</>,
+        type: 'boolean',
+        default: false
+    },
+    {
+        name: 'cloud.syncinterval',
+        desc: <>Auto sync interval in seconds</>,
+        type: 'number',
+        default: 30
+    },
+    {
+        name: 'cloud.conflictresolution',
+        desc: <>Default conflict resolution strategy</>,
+        type: 'select',
+        options: [
+            { value: 'ask', label: 'Always ask' },
+            { value: 'local', label: 'Prefer local' },
+            { value: 'cloud', label: 'Prefer cloud' },
+            { value: 'merge', label: 'Smart merge' }
+        ],
+        default: 'ask'
+    },
+    {
+        name: 'cloud.backupbeforeconflict',
+        desc: <>Create backup before resolving conflicts</>,
+        type: 'boolean',
+        default: true
+    },
     // {
     //     name: 'interface.showprogressbaronsidebar',
     //     desc: <>Show a progress bar instead of filling the background for subjects on the sidebar</>,
