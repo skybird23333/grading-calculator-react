@@ -467,27 +467,7 @@ export class Assessment extends React.Component {
             : ""
         }`;
 
-        const progressbar =
-          this.props.g.due && !this.props.g.subtasks ? null : (
-            <Progress max={100} val={this.props.g.grading} color={this.color}>
-              <div
-                className="prog-content"
-                style={{
-                  position: "absolute",
-                  width: "3px",
-                  height: "25px",
-                  bottom: "-5px",
-                  background: "rgba(255, 255, 0, 0.5)",
-                  left: "25%",
-                }}
-              ></div>
-            </Progress>
-          );
-
-        if (this.props.g.due && !this.props.g.subtasks) {
-          actualWeighting = null;
-        }
-
+        
         // Calculate potential change if all remaining subtasks are completed with 100 or 0
         const potentialSubtaskMarks =
           this.props.g.subtasks && this.props.g.subtasks.length > 0
@@ -513,6 +493,32 @@ export class Assessment extends React.Component {
                 };
               })()
             : { up: 0, down: 0 };
+
+        const progressbar =
+          this.props.g.due && !this.props.g.subtasks ? null : (<>
+            <Progress max={100} val={this.props.g.grading} color={this.color}
+            children_2={(
+              <>
+                {this.props.g.subtasks && (
+                  <>
+                    <div className="prog-content" style={{ position: "absolute", width: "3px", height: '15px', bottom: '-5px', background: "rgba(255, 100, 100, 0.5)", left: potentialSubtaskMarks.down.toFixed() + "%" }}></div>
+                    <div className="prog-content" style={{ position: "absolute", width: "3px", height: '15px', bottom: '-5px', background: "rgba(255, 255, 0, 0.5)", left: potentialSubtaskMarks.up.toFixed() + "%" }}></div>
+                  </>
+                )}
+              </>
+            )}>
+            </Progress>
+                </>
+
+          );
+
+        if (this.props.g.due && !this.props.g.subtasks) {
+          actualWeighting = null;
+        }
+
+        if (this.props.g.due && !this.props.g.subtasks) {
+          actualWeighting = null;
+        }
 
         return (
           <>
@@ -561,9 +567,9 @@ export class Assessment extends React.Component {
                     <>
                       <Label>
                         <span
-                          title={`You will currently achieve a minimum of ${potentialSubtaskMarks.down.toFixed(
+                          title={`You are guaranteed a minimum of ${potentialSubtaskMarks.down.toFixed(
                             2
-                          )}`}
+                          )} on this assessment.`}
                           style={{ color: "rgb(255, 100, 100)" }}
                         >
                           <FaAngleLeft />{" "}
@@ -575,7 +581,7 @@ export class Assessment extends React.Component {
                         <span
                           title={`You will currently achieve a maximum of ${potentialSubtaskMarks.up.toFixed(
                             2
-                          )}`}
+                          )} on this assessment.`}
                           style={{ color: "yellow" }}
                         >
                           <FaAngleRight />{" "}
@@ -600,8 +606,8 @@ export class Assessment extends React.Component {
                           this.props.g.subtasks.filter((t) => t.completed)
                             .length
                             ? ""
-                            : ` on avg`}
-                        </span>
+                            : ` on avg`
+                        }</span>
                       </>
                     ) : this.props.g.due ? (
                       "Due"

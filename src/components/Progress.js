@@ -15,16 +15,19 @@ export class Progress extends React.Component {
         this.progressPercentage = (this.props.val / this.props.max) * 100
 
         return(
-            <div className="prog-container">
+            <div className="prog-container" style={{position: "relative"}}>
                 <div
                     className={this.progressContentClassName}
                     style={{
                         width: `${this.progressPercentage}%`,
-                        background: this.props.color || 'var(--foreground-primary)'
+                        background: this.props.color || 'var(--foreground-primary)',
+                        position: 'relative'
                     }}
                 >
-                    <slot></slot>
+                    {this.props.children}
                 </div>
+                {/* this is for markers that dont need to be relative to the actual progress */}
+                {this.props.children_2}
             </div>
         )
     }
