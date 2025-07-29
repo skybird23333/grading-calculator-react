@@ -1,15 +1,19 @@
 // src/index.js
 
-import React, { useEffect, useState } from "react";
+import React, {  useEffect, useState  } from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import { HashRouter, Routes, Route, Link } from "react-router-dom";
+import {  HashRouter, Routes, Route, Link  } from "react-router-dom";
 
-import { Subject } from "./routes/SubjectPage";
-import { IndexRoute } from "./routes/Index";
-import { ComponentTest } from "./routes/ComponentTest";
+import {  Subject  } from "./routes/SubjectPage";
+import {  IndexRoute  } from "./routes/Index";
+import {  ComponentTest  } from "./routes/ComponentTest";
 import withRouter from "./utils/withRouterProp";
 import NotFound from "./routes/NotFound";
+import { Button } from "./components/Button";
+import { createClient } from "@supabase/supabase-js";
+import { Auth } from "@supabase/auth-ui-react";
+import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { Button } from "./components/Button";
 import { createClient } from "@supabase/supabase-js";
 import { Auth } from "@supabase/auth-ui-react";
@@ -23,20 +27,30 @@ import {
   useCloudUpdatePending,
   setCloudSyncManager,
 } from "./utils/storagehelper";
-import { SubjectComponent } from "./components/SubjectComponent";
+import {  SubjectComponent  } from "./components/SubjectComponent";
 import {
+  
   FaCalendar,
+ 
   FaCloud,
+ 
   FaHome,
+ 
   FaBars,
+ 
   FaCross,
+ 
   FaCheck,
+ 
   FaXing,
+ 
   FaLongArrowAltLeft,
+ 
   FaCog,
+,
 } from "react-icons/fa";
-import { SubjectComponentCompact } from "./components/SubjectComponentCompact";
-import { Calendar } from "./routes/Calendar";
+import {  SubjectComponentCompact  } from "./components/SubjectComponentCompact";
+import {  Calendar  } from "./routes/Calendar";
 import Settings from "./routes/Settings";
 import CloudSyncManager from "./utils/cloudSyncManager";
 import { CloudSyncIndicator } from "./components/CloudSyncIndicator";
@@ -45,11 +59,15 @@ import { getSetting } from "./utils/settingsManager";
 import { calculateInformation } from "./utils/calculateInformation";
 
 const supabase = createClient(
+  
   "https://eyivovbhiearpppplrsi.supabase.co",
+ 
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV5aXZvdmJoaWVhcnBwcHBscnNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAzODM2MTAsImV4cCI6MjA1NTk1OTYxMH0.cKKuHJeovtngIQ5Q-ypJGvEtwpJ_6C0SdVio8PSxA8M"
+
 );
 
 Math.roundTwoDigits = function (num) {
+  return this.round((num + Number.EPSILON) * 100) / 100;
   return this.round((num + Number.EPSILON) * 100) / 100;
 };
 
@@ -93,6 +111,10 @@ const App = () => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
     });
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
 
     const {
       data: { subscription },
@@ -109,14 +131,23 @@ const App = () => {
   }, [cloudSyncManager]);
 
   const isCloudUpdatePending = useCloudUpdatePending();
+  const isCloudUpdatePending = useCloudUpdatePending();
 
+  useEffect(() => {
+    setSaved(!isCloudUpdatePending);
+  }, [isCloudUpdatePending]);
   useEffect(() => {
     setSaved(!isCloudUpdatePending);
   }, [isCloudUpdatePending]);
 
   const [subjects, setSubjects] = useState(getAllSubjects());
   const [draggedIndex, setDraggedIndex] = useState(-1);
+  const [subjects, setSubjects] = useState(getAllSubjects());
+  const [draggedIndex, setDraggedIndex] = useState(-1);
 
+  onStorageChanged(() => {
+    setSubjects(getAllSubjects());
+  });
   onStorageChanged(() => {
     setSubjects(getAllSubjects());
   });
@@ -127,11 +158,23 @@ const App = () => {
       goal: 100,
       assessments: [],
     };
+  const handleAddSubject = () => {
+    const newSubject = {
+      name: "New Subject",
+      goal: 100,
+      assessments: [],
+    };
 
     const id = createSubject(newSubject);
     setSubjects([...subjects, [newSubject, id]]);
   };
+    const id = createSubject(newSubject);
+    setSubjects([...subjects, [newSubject, id]]);
+  };
 
+  const handleDragStart = (e, index) => {
+    setDraggedIndex(index);
+  };
   const handleDragStart = (e, index) => {
     setDraggedIndex(index);
   };
@@ -147,7 +190,21 @@ const App = () => {
       setSubjects(newItems);
     }
   };
+  const handleDragOver = (e, index) => {
+    e.preventDefault();
+    if (draggedIndex !== index) {
+      const newItems = [...subjects];
+      const draggedItem = newItems[draggedIndex];
+      newItems.splice(draggedIndex, 1);
+      newItems.splice(index, 0, draggedItem);
+      setDraggedIndex(index);
+      setSubjects(newItems);
+    }
+  };
 
+  const handleDragEnd = () => {
+    setSubjectIndex(subjects.map((s) => s[1]));
+  };
   const handleDragEnd = () => {
     setSubjectIndex(subjects.map((s) => s[1]));
   };
@@ -181,7 +238,26 @@ const App = () => {
     window.addEventListener("click", collapse);
     return () => window.removeEventListener("click", collapse);
   }, [collapsed]);
+  //AUto collapse if tapping outside of sidebar
+  useEffect(() => {
+    const collapse = (evt) => {
+      if (window.innerWidth > 1300) return;
+      if (
+        evt.target.closest(".side-contents") ||
+        evt.target.closest(".navbar-content") ||
+        evt.target.closest("svg")
+      )
+        return;
+      setCollapsed(true);
+    };
+    window.addEventListener("click", collapse);
+    return () => window.removeEventListener("click", collapse);
+  }, [collapsed]);
 
+  const handlePageChange = () => {
+    if (window.innerWidth > 1300) return;
+    setCollapsed(true);
+  };
   const handlePageChange = () => {
     if (window.innerWidth > 1300) return;
     setCollapsed(true);
@@ -305,4 +381,5 @@ const App = () => {
   );
 };
 
+root.render(<App />);
 root.render(<App />);
