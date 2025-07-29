@@ -40,6 +40,8 @@ export class Assessment extends React.Component {
       key: this.props.keyy,
       mode: undefined,
       due: !!this.props.g.due,
+      showSubtaskPopup: false,
+      subtaskCount: 1,
     };
 
     this.handleNameChange = this.handleNameChange.bind(this);
@@ -52,6 +54,9 @@ export class Assessment extends React.Component {
     this.handleSubtaskCompletedChange =
       this.handleSubtaskCompletedChange.bind(this);
     this.handleStatusChange = this.handleStatusChange.bind(this);
+    this.handleSubtaskCountChange = this.handleSubtaskCountChange.bind(this);
+    this.handleCreateSubtasks = this.handleCreateSubtasks.bind(this);
+    this.handleCancelSubtasks = this.handleCancelSubtasks.bind(this);
   }
 
   componentDidUpdate() {
@@ -120,13 +125,7 @@ export class Assessment extends React.Component {
   // Toggle assessment to subtask mode by adding a subtasks array if not already present.
   handleToggleSubtasks() {
     if (!this.props.g.subtasks) {
-      const newSubtasks = [{ grade: 0, completed: false }];
-      const newGrading = 0;
-      this.props.onAssessmentChange({
-        subtasks: newSubtasks,
-        grading: newGrading,
-        key: this.state.key,
-      });
+      this.setState({ showSubtaskPopup: true });
     }
   }
 
@@ -190,6 +189,37 @@ export class Assessment extends React.Component {
     });
     this.recalculateSubtaskGrading(newSubtasks);
   }
+
+  // Handle subtask count input change
+  handleSubtaskCountChange(e) {
+    const count = parseInt(e.target.value);
+    if (count > 0 && count <= 20) { // Reasonable limit
+      this.setState({ subtaskCount: count });
+    }
+  }
+
+  // Create subtasks based on the specified count
+  handleCreateSubtasks() {
+    const { subtaskCount } = this.state;
+    const newSubtasks = Array(subtaskCount).fill(null).map(() => ({
+      grade: 0,
+      completed: false
+    }));
+    
+    this.props.onAssessmentChange({
+      subtasks: newSubtasks,
+      grading: 0,
+      key: this.state.key,
+    });
+    
+    this.setState({ showSubtaskPopup: false, subtaskCount: 1 });
+  }
+
+  // Cancel subtask creation
+  handleCancelSubtasks() {
+    this.setState({ showSubtaskPopup: false, subtaskCount: 1 });
+  }
+
   render() {
     this.color = (() => {
       if (this.props.g.due && !this.props.g.subtasks) return "#05b3f2";
@@ -260,12 +290,46 @@ export class Assessment extends React.Component {
                   >
                     Delete
                   </Button>
-                  {!this.props.g.subtasks && (
+                  {!this.props.g.subtasks && !this.state.showSubtaskPopup && (
                     <Button onClick={this.handleToggleSubtasks}>
                       Subtask Mode
                     </Button>
                   )}
+                {/* Inline Subtask Creation UI */}
+                {this.state.showSubtaskPopup && (
+                  <div
+                    style={{
+                      display: "inline-block",
+                      background: "var(--background-secondary)",
+                      padding: '0 10px',
+                    }}
+                  >
+                    <span style={{ margin: '15px 0' }}>
+                      <label style={{ display: 'inline-block', marginBottom: '8px' }}>
+                        Number of subtasks:
+                      </label>
+                      <Input
+                        type="number"
+                        min="1"
+                        max="20"
+                        value={this.state.subtaskCount}
+                        onChange={this.handleSubtaskCountChange}
+                        style={{ width: '80px', textAlign: 'center', margin: '0 auto' }}
+                      />
+                    </span>
+                      <Button onClick={this.handleCancelSubtasks}>
+                        Cancel
+                      </Button>
+                      <Button 
+                        onClick={this.handleCreateSubtasks}
+                        style={{ backgroundColor: 'var(--green-dark)'}}
+                      >
+                        Create
+                      </Button>
+                  </div>
+                )}
                 </div>
+
                 <div className="assessment-input-grid">
                   <div>
                     <FaWeightHanging /> Weighting

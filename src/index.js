@@ -14,10 +14,6 @@ import { Button } from "./components/Button";
 import { createClient } from "@supabase/supabase-js";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
-import { Button } from "./components/Button";
-import { createClient } from "@supabase/supabase-js";
-import { Auth } from "@supabase/auth-ui-react";
-import { ThemeSupa } from "@supabase/auth-ui-shared";
 import Login from "./routes/Login";
 import {
   createSubject,
@@ -47,7 +43,6 @@ import {
   FaLongArrowAltLeft,
  
   FaCog,
-,
 } from "react-icons/fa";
 import {  SubjectComponentCompact  } from "./components/SubjectComponentCompact";
 import {  Calendar  } from "./routes/Calendar";
@@ -111,10 +106,6 @@ const App = () => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
     });
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    });
 
     const {
       data: { subscription },
@@ -131,7 +122,6 @@ const App = () => {
   }, [cloudSyncManager]);
 
   const isCloudUpdatePending = useCloudUpdatePending();
-  const isCloudUpdatePending = useCloudUpdatePending();
 
   useEffect(() => {
     setSaved(!isCloudUpdatePending);
@@ -142,12 +132,7 @@ const App = () => {
 
   const [subjects, setSubjects] = useState(getAllSubjects());
   const [draggedIndex, setDraggedIndex] = useState(-1);
-  const [subjects, setSubjects] = useState(getAllSubjects());
-  const [draggedIndex, setDraggedIndex] = useState(-1);
 
-  onStorageChanged(() => {
-    setSubjects(getAllSubjects());
-  });
   onStorageChanged(() => {
     setSubjects(getAllSubjects());
   });
@@ -158,23 +143,10 @@ const App = () => {
       goal: 100,
       assessments: [],
     };
-  const handleAddSubject = () => {
-    const newSubject = {
-      name: "New Subject",
-      goal: 100,
-      assessments: [],
-    };
-
-    const id = createSubject(newSubject);
-    setSubjects([...subjects, [newSubject, id]]);
-  };
     const id = createSubject(newSubject);
     setSubjects([...subjects, [newSubject, id]]);
   };
 
-  const handleDragStart = (e, index) => {
-    setDraggedIndex(index);
-  };
   const handleDragStart = (e, index) => {
     setDraggedIndex(index);
   };
@@ -190,21 +162,7 @@ const App = () => {
       setSubjects(newItems);
     }
   };
-  const handleDragOver = (e, index) => {
-    e.preventDefault();
-    if (draggedIndex !== index) {
-      const newItems = [...subjects];
-      const draggedItem = newItems[draggedIndex];
-      newItems.splice(draggedIndex, 1);
-      newItems.splice(index, 0, draggedItem);
-      setDraggedIndex(index);
-      setSubjects(newItems);
-    }
-  };
 
-  const handleDragEnd = () => {
-    setSubjectIndex(subjects.map((s) => s[1]));
-  };
   const handleDragEnd = () => {
     setSubjectIndex(subjects.map((s) => s[1]));
   };
@@ -238,26 +196,6 @@ const App = () => {
     window.addEventListener("click", collapse);
     return () => window.removeEventListener("click", collapse);
   }, [collapsed]);
-  //AUto collapse if tapping outside of sidebar
-  useEffect(() => {
-    const collapse = (evt) => {
-      if (window.innerWidth > 1300) return;
-      if (
-        evt.target.closest(".side-contents") ||
-        evt.target.closest(".navbar-content") ||
-        evt.target.closest("svg")
-      )
-        return;
-      setCollapsed(true);
-    };
-    window.addEventListener("click", collapse);
-    return () => window.removeEventListener("click", collapse);
-  }, [collapsed]);
-
-  const handlePageChange = () => {
-    if (window.innerWidth > 1300) return;
-    setCollapsed(true);
-  };
   const handlePageChange = () => {
     if (window.innerWidth > 1300) return;
     setCollapsed(true);
