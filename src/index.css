@@ -11,60 +11,60 @@
   --font-family: Inter, sans-serif;
 
   /* Color base (default/mid tones) */
-  --blue: #3b82f6;       /* Crisp but not harsh */
-  --red: #f87171;        /* Softer than ef4444 */
-  --yellow: #facc15;     /* Less aggressive than eab308 */
-  --green: #22c55e;
+  --blue: #18488f; /* base anchor */
+  --red: #8a1010;  /* base anchor */
+  --yellow: #a56023; /* base anchor */
+  --green: #068606; /* base anchor */
   --purple: #a855f7;     /* For question/note callouts */
   --orange: #fb923c;     /* For warning callouts */
   --cyan: #06b6d4;       /* For info callouts */
   --pink: #ec4899;       /* For important callouts */
 
-  /* Darker versions (for backgrounds) */
-  --blue-dark: #1d4ed8;
-  --red-dark: #b91c1c;
-  --yellow-dark: #ca8a04;
-  --green-dark: #15803d;
+  /* Darker versions (for backgrounds) - recalibrated around new bases */
+  --blue-dark: #112f5f;   /* ~30% darker than base */
+  --red-dark: #5d0c0c;    /* deepen without losing hue */
+  --yellow-dark: #6f4118; /* richer roasted tone */
+  --green-dark: #045e04;  /* darker foliage */
   --purple-dark: #7c3aed;
   --orange-dark: #ea580c;
   --cyan-dark: #0891b2;
   --pink-dark: #be185d;
 
-  /* Lighter versions (for borders/highlights) */
-  --blue-light: #93c5fd;
-  --red-light: #fecaca;
-  --yellow-light: #fef08a;
-  --green-light: #bbf7d0;
+  /* Lighter versions (for borders/highlights) - soft tints from base */
+  --blue-light: #6e99d1;   /* softened light variant */
+  --red-light: #e27f7f;    /* warm light red */
+  --yellow-light: #f2c48f; /* golden wheat */
+  --green-light: #8ad98a;  /* fresh mint */
   --purple-light: #c4b5fd;
   --orange-light: #fed7aa;
   --cyan-light: #a5f3fc;
   --pink-light: #fbcfe8;
 
   /* Base RGB values */
-  --blue-rgb: 59, 130, 246;
-  --red-rgb: 248, 113, 113;
-  --yellow-rgb: 250, 204, 21;
-  --green-rgb: 34, 197, 94;
+  --blue-rgb: 24, 72, 143;
+  --red-rgb: 138, 16, 16;
+  --yellow-rgb: 165, 96, 35;
+  --green-rgb: 6, 134, 6;
   --purple-rgb: 168, 85, 247;
   --orange-rgb: 251, 146, 60;
   --cyan-rgb: 6, 182, 212;
   --pink-rgb: 236, 72, 153;
 
   /* Dark RGB values */
-  --blue-dark-rgb: 29, 78, 216;
-  --red-dark-rgb: 185, 28, 28;
-  --yellow-dark-rgb: 202, 138, 4;
-  --green-dark-rgb: 21, 128, 61;
+  --blue-dark-rgb: 17, 47, 95;
+  --red-dark-rgb: 93, 12, 12;
+  --yellow-dark-rgb: 111, 65, 24;
+  --green-dark-rgb: 4, 94, 4;
   --purple-dark-rgb: 124, 58, 237;
   --orange-dark-rgb: 234, 88, 12;
   --cyan-dark-rgb: 8, 145, 178;
   --pink-dark-rgb: 190, 24, 93;
 
   /* Light RGB values */
-  --blue-light-rgb: 147, 197, 253;
-  --red-light-rgb: 254, 202, 202;
-  --yellow-light-rgb: 254, 240, 138;
-  --green-light-rgb: 187, 247, 208;
+  --blue-light-rgb: 110, 153, 209;
+  --red-light-rgb: 226, 127, 127;
+  --yellow-light-rgb: 242, 196, 143;
+  --green-light-rgb: 138, 217, 138;
   --purple-light-rgb: 196, 181, 253;
   --orange-light-rgb: 254, 215, 170;
   --cyan-light-rgb: 165, 243, 252;
