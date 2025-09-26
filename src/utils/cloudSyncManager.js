@@ -19,9 +19,9 @@ class CloudSyncManager {
         this.retryCount = 0;
         this.maxRetries = 3;
         this.backupData = null;
+        this.isFirstInitialization = true; // Track if this is the first initialization
         
-        // Get initial data timestamps
-        this.updateLocalTimestamp();
+        // Don't initialize local timestamp in constructor to avoid interfering with initial sync
         
         // Listen for auth changes
         this.setupAuthListener();
@@ -162,6 +162,11 @@ class CloudSyncManager {
                 } else {
                     console.log('No data in cloud or locally, starting fresh');
                 }
+                // Initialize local timestamp after first sync
+                if (this.isFirstInitialization) {
+                    this.updateLocalTimestamp();
+                    this.isFirstInitialization = false;
+                }
                 return;
             }
 
@@ -170,7 +175,22 @@ class CloudSyncManager {
             
             this.lastCloudUpdate = cloudTimestamp;
 
-            // Determine sync strategy
+            // For first initialization with auto-sync, prioritize cloud data if it exists
+            if (this.isFirstInitialization && cloudSubjects.length > 0) {
+                console.log('First initialization with auto-sync enabled - downloading from cloud...');
+                await this.downloadFromCloud();
+                this.updateLocalTimestamp();
+                this.isFirstInitialization = false;
+                return;
+            }
+
+            // Initialize local timestamp if not set yet
+            if (this.isFirstInitialization) {
+                this.updateLocalTimestamp();
+                this.isFirstInitialization = false;
+            }
+
+            // Determine sync strategy for subsequent syncs
             if (localData.length === 0) {
                 // Local is empty, download from cloud
                 console.log('Local data is empty, downloading from cloud...');
