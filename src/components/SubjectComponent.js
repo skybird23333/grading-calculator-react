@@ -5,11 +5,12 @@ import {Button} from "./Button";
 import {calculateInformation} from "../utils/calculateInformation";
 import gradeOverview from "./GradeOverview";
 import calculateColorFromGrade from "../utils/calculateColorFromGrade";
+import MarkDisplay from "./MarkDisplay";
 
 export function SubjectComponent({subject, id}) {
     const navigate = useNavigate()
 
-    if ((!subject?.name && !subject?.goal) || subject === {}) {
+    if ((!subject?.name && !subject?.goal)) {
         console.log(`UNABLE TO LOAD SUBJECT ${id}. DATA HAS BEEN LOGGED BELOW.`)
         console.log(subject)
 
@@ -79,7 +80,15 @@ export function SubjectComponent({subject, id}) {
              }}
         >
             <div className="card-header">
-                <FaBook/> {subject.name}
+                <FaBook/> {subject.name} {" "}
+                <span
+                        style={{
+                            color: "var(--" + calculateColorFromGrade(info.currentGrade) + ")",
+                            filter: "brightness(150%)",
+                        }}
+                    >
+                        { MarkDisplay(info.currentGrade) }
+                    </span>
             </div>
 
                 {gradeOverview({

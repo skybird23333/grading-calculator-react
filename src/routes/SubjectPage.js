@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { Button } from "../components/Button";
 import { Assessment } from "../components/Assessment";
 import { Input } from "../components/Input";
 import { FaBook } from "react-icons/fa";
 import { getSubject, updateSubject } from "../utils/storagehelper";
 import { calculateInformation } from "../utils/calculateInformation";
-import gradeOverview from "../components/GradeOverview";
+// Removed GradeOverview usage; inline labels are rendered above the progress bar now
 import { useParams } from "react-router-dom";
 import { getSetting } from "../utils/settingsManager";
 import { ar } from "date-fns/locale";
+import MarkDisplay from "../components/MarkDisplay";
+import calculateColorFromGrade from "../utils/calculateColorFromGrade";
 
 const subjectInformation = {
   name: "NULL Subject",
@@ -36,6 +38,34 @@ export function Subject() {
   const [editing, setEditing] = useState(false);
   const [draggedIndex, setDraggedIndex] = useState(-1);
   const { subjectId } = useParams();
+  const barRef = useRef(null);
+  const [barWidth, setBarWidth] = useState(0);
+
+  // Measure the inner progress bar width to align labels (Minimum/Goal/Maximum)
+  useLayoutEffect(() => {
+    const el = barRef.current;
+    const update = () => setBarWidth(el ? el.clientWidth : 0);
+
+    // Immediate + microtask + next frame
+    update();
+    Promise.resolve().then(update);
+    const raf = requestAnimationFrame(update);
+
+    window.addEventListener("resize", update);
+
+    let ro;
+    if (window.ResizeObserver && el) {
+      ro = new ResizeObserver(() => update());
+      ro.observe(el);
+    }
+
+    return () => {
+      window.removeEventListener("resize", update);
+      cancelAnimationFrame(raf);
+      if (ro) ro.disconnect();
+    };
+    // Re-bind when ref element changes or when the underlying grey width percentage changes
+  }, [barRef.current]);
 
   useEffect(() => {
     if (subjectId) {
@@ -253,8 +283,55 @@ export function Subject() {
 
   if (!(weightTotal - currentWeightTotal)) minimumScore = null;
 
+  // Pre-compute aligned label boxes for Minimum, Goal, Maximum
+  const labelWidthPx = 80;
+  const labelItems = (() => {
+    if (!barWidth) return [];
+    // Clamp a percentage to [0, 100]
+    const clampPct = (v) => Math.max(0, Math.min(100, isNaN(v) ? 0 : v));
+    const toX = (pct) => (clampPct(pct) / 100) * barWidth;
+
+    const items = [
+      {
+        key: "min",
+        label: "Minimum",
+        value: currentGradeTotal,
+        color: "rgb(255, 100, 100)",
+        x: toX(currentGradeTotal), // desired center x
+      },
+      {
+        key: "goal",
+        label: "Goal",
+        value: info.goal,
+        color: "rgba(0, 153, 255, 1)",
+        x: toX(info.goal),
+      },
+      {
+        key: "max",
+        label: "Maximum",
+        value: maximumGrade,
+        color: "yellow",
+        x: toX(maximumGrade),
+      },
+    ];
+
+    // Sort by numeric value (leftmost in scale first)
+    items.sort((a, b) => a.value - b.value);
+
+    // Place boxes centered when possible; if overlapping, stack to the right of the previous one
+    let prevRight = 0;
+    return items.map((it) => {
+      // initial left to center the box
+      let left = it.x - labelWidthPx / 2;
+      if (left < 0) left = 0; // keep within left bound
+      if (left < prevRight) left = prevRight; // stack right after previous
+      prevRight = left + labelWidthPx;
+      return { ...it, left };
+    });
+  })();
+
   const scoreProgressBar = (
-    <div className="prog-container">
+    <div className="prog-container" style={{ marginTop: 36 }}>
       <div
         className="prog-content-large"
         style={{
@@ -269,8 +346,36 @@ export function Subject() {
           width: currentWeightTotal + "%",
           background: "var(--foreground-border)",
           position: "relative",
+            overflow: "visible",
         }}
+        ref={barRef}
       >
+        {/* Aligned labels (Minimum/Goal/Maximum) positioned above the bar */}
+        <div
+          style={{
+            position: "absolute",
+            left: 0,
+            top: -36,
+            width: "100%",
+            height: 0,
+            pointerEvents: "none",
+          }}
+        >
+          {labelItems.map(({ key, label, value, color, left }) => (
+            <div
+              key={key}
+              style={{
+                position: "absolute",
+                left: left + "px",
+                width: labelWidthPx + "px",
+                textAlign: "center",
+              }}
+            >
+              <div className="secondary-label">{label}</div>
+              <div style={{ color }}>{MarkDisplay(value)}</div>
+            </div>
+          ))}
+        </div>
         <div
           className="prog-content"
           style={{
@@ -312,15 +417,7 @@ export function Subject() {
     </div>
   );
 
-  const recentChange = info.assessments
-    .filter((a) => a.changeToTotalMark)
-    .pop()
-    ?.changeToTotalMark.toFixed(2);
-  const totalChange = info.assessments
-    .filter((a) => a.changeToTotalMark)
-    .map((a) => a.changeToTotalMark)
-    .reduce((prev, cur) => prev + cur, 0)
-    .toFixed(2);
+  // recentChange and totalChange were only used by GradeOverview; removed for now
 
   const totalScoreRanges = Array.from({ length: 19 }, (_, i) => (i + 1) * 5);
   const calculatedResults = totalScoreRanges.map((goal) => ({
@@ -409,22 +506,18 @@ let scoreRangeTable =
   let scoreInformation = (
     <div>
       <h2 style={{ width: "100%" }}>
-        <FaBook /> {info.name}
+        <FaBook /> {info.name} <span
+            style={{
+                color: "var(--" + calculateColorFromGrade(currentGrade) + ")",
+                filter: "brightness(150%)",
+            }}
+        >
+            { MarkDisplay(currentGrade) }
+        </span>
         <Button style={{ float: "right" }} onClick={handleEdit}>
           Edit
         </Button>
       </h2>
-      {gradeOverview(
-        {
-          currentGrade,
-          currentGradeTotal,
-          goal: info.goal,
-          maximumGrade,
-          recentChange,
-          totalChange,
-        },
-        true
-      )}
       {scoreProgressBar}
       {minimumScore}
       {scoreRangeTable}
@@ -459,17 +552,6 @@ let scoreRangeTable =
           </Button>
         </h2>
       </div>
-      {gradeOverview(
-        {
-          currentGrade,
-          currentGradeTotal,
-          goal: info.goal,
-          maximumGrade,
-          recentChange,
-          totalChange,
-        },
-        true
-      )}
       {scoreProgressBar}
       {minimumScore}
       {underAllocationWarning}
